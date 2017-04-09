@@ -9,12 +9,12 @@ package employeetimekeepingapplication;
  *
  * @author Dave
  */
-public class EmployeeTimekeepingApplication {
-
-    public static void main(String[] args) {
-        //create a singly linked list
-        SLinkedList list = new SLinkedList();
-        
-    }
+public class Admin extends Employee {
     
+    
+    public Admin(String locationId){
+        super(locationId);
+    }
+    private String adminLoginId;
+
 }
