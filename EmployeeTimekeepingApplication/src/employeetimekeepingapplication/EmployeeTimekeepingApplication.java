@@ -20,16 +20,30 @@ import javax.swing.JOptionPane;
 public class EmployeeTimekeepingApplication {
 
     public static void main(String[] args){
-        LinkedList<Employee> employeeList = new LinkedList<Employee>();
+        SLinkedList list = new SLinkedList();
         
-        int item = mainMenu();
+        int item = choiceMenu();
+        addEmployee(list,item);
         
-        System.out.println(item);
         
     }
     
-    private static void addEmployee(LinkedList<Employee> list){
-        
+    private static void addEmployee(SLinkedList list, int choice){
+        Employee employee = null;
+        switch(choice){
+            case 1:
+                employee = new Employee();
+                break;
+            case 2:
+                employee = new Manager();
+                break;
+            case 3:
+                employee = new Admin();
+                break;            
+        }
+        createEmployee(employee);
+        SNode node = new SNode(employee,null);
+        list.add(node);
     }
     
     private static void createEmployee(Employee employee){
@@ -38,7 +52,7 @@ public class EmployeeTimekeepingApplication {
         employee.setPassword(JOptionPane.showInputDialog("Enter password: "));
         
         if(employee instanceof Manager){
-            ///
+            System.out.println("working");
         }
         
     }
@@ -128,6 +142,23 @@ public class EmployeeTimekeepingApplication {
             JOptionPane.showMessageDialog(null, "Invalid choice, Try again");
             }
         }while(choice <= 0 || choice > 2);
+        
+        return choice;
+    }
+    
+    private static int choiceMenu(){
+        int choice = 0;
+        do{
+            try{
+                choice = Integer.parseInt(JOptionPane.showInputDialog("Enter Number Option: \n" + 
+                        "1. Create Employee account \n" +
+                        "2. Create Manager account \n" +
+                        "3. Create Admin account "
+                ));
+            }catch(NumberFormatException e){
+                JOptionPane.showMessageDialog(null, "Invalid Option. Try again");
+            }
+        }while(choice <= 0 || choice > 3);
         
         return choice;
     }
