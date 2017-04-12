@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package employeetimekeepingapplication;
+import java.util.Random;
 
 /**
  *
@@ -30,8 +31,9 @@ public class Employee {
     
     //accesors
     
-    public Employee(String locationId){
-        Location aLocation = new Location(locationId);
+    public Employee(){
+        this.address = new Address();
+        this.location = new Location();
     }
     public String getFirstName(){
         return firstName;
@@ -64,6 +66,11 @@ public class Employee {
     }
     public void setPassword(String password){
         this.password = password;
+    }
+    
+    public void setID(){
+        Random rand = new Random();
+        this.id = this.firstName.substring(0,3) + rand.nextInt(2000);
     }
     
     
