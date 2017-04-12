@@ -8,6 +8,8 @@ package employeetimekeepingapplication;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
 import java.util.LinkedList;
 import javax.swing.JOptionPane;
 
@@ -20,13 +22,14 @@ public class EmployeeTimekeepingApplication {
     public static void main(String[] args){
         LinkedList<Employee> employeeList = new LinkedList<Employee>();
         
+        int item = mainMenu();
+        
+        System.out.println(item);
         
     }
     
     private static void addEmployee(LinkedList<Employee> list){
-        Employee employee = new Employee();
-        createEmployee(employee);
-        list.add(employee);
+        
     }
     
     private static void createEmployee(Employee employee){
@@ -37,9 +40,7 @@ public class EmployeeTimekeepingApplication {
         if(employee instanceof Manager){
             ///
         }
-        if(employee instanceof Administrator){
-            //
-        }
+        
     }
     
     private static void addAddress(Employee employee){
@@ -72,29 +73,65 @@ public class EmployeeTimekeepingApplication {
         return locationID;
     }
     
-    private static String checkFileExists(String filepath){
+    private static boolean checkFileExists(){
         String fileName = "database.txt";
         File f = new File(fileName);
         boolean check = f.exists();
+
         
-        if(check == false){
-            try{
-                PrintWriter file = new PrintWriter("database.txt");
-                file.write("Conents");
-                
-            }catch(IOException e){
-            }
+        return check;
+    }
+    
+    private static void createFile(){
+        if(checkFileExists()){
+            JOptionPane.showMessageDialog(null, "Loading database");
         }
-        
-        return fileName;
+        else{
+            try{
+                File file = new File("database.txt");
+                
+                if(file.createNewFile()){
+                    JOptionPane.showMessageDialog(null, "Creating database");
+                }
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+            
+        }
     }
     
     private static void login(String filepath){
         
     }
     
-    private static void writeToFile(String filepath){
-        
+    private static void writeToFile(String filepath, Employee employee){
+        PrintWriter pr = null;
+        try{
+            pr = new PrintWriter(new BufferedWriter(new FileWriter(new File(filepath), true)));
+            pr.println("Testing");
+            
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        finally{
+            pr.close();
+        }
     }
+    
+    private static int mainMenu(){
+        int choice = 0;
+        do{
+            try{
+            choice = Integer.parseInt(JOptionPane.showInputDialog("Enter Number Option: \n" + 
+                    "1. Create Account \n" + "2. Login To existing Account"));
+            }catch(NumberFormatException e){
+            JOptionPane.showMessageDialog(null, "Invalid choice, Try again");
+            }
+        }while(choice <= 0 || choice > 2);
+        
+        return choice;
+    }
+    
+    
     
 }
