@@ -12,9 +12,11 @@ package employeetimekeepingapplication;
 public class Manager extends Employee {
     
    private String managerLoginId;
-   
+   public Manager(){
+       
+   }
    public Manager(String locationId){
-       super(locationId);
+       //super(locationId);
    }
    
 

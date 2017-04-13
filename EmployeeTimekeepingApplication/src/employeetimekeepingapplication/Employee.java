@@ -30,7 +30,7 @@ public class Employee {
     //**BEHAVIORS**
     
     //accesors
-    
+
     public Employee(){
         this.address = new Address();
         this.location = new Location();

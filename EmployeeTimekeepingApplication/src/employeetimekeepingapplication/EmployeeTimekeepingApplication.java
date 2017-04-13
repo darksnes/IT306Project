@@ -20,12 +20,24 @@ import javax.swing.JOptionPane;
 public class EmployeeTimekeepingApplication {
 
     public static void main(String[] args){
+        
+        //create linked list
         SLinkedList list = new SLinkedList();
         
-        int item = choiceMenu();
-        addEmployee(list,item);
+        //if file does not exist, create file
+        if(!checkFileExists()){
+            createFile();
+        }
+        //store contents of file into linked list
+       
         
         
+       int item = -1;
+       do{
+            item = choiceMenu();
+ 
+       }while(item !=4);
+      //  
     }
     
     private static void addEmployee(SLinkedList list, int choice){
@@ -51,9 +63,8 @@ public class EmployeeTimekeepingApplication {
         employee.setLastName(JOptionPane.showInputDialog("Enter last name: "));
         employee.setPassword(JOptionPane.showInputDialog("Enter password: "));
         
-        if(employee instanceof Manager){
-            System.out.println("working");
-        }
+        addAddress(employee);
+        addLocation(employee);
         
     }
     
@@ -153,12 +164,14 @@ public class EmployeeTimekeepingApplication {
                 choice = Integer.parseInt(JOptionPane.showInputDialog("Enter Number Option: \n" + 
                         "1. Create Employee account \n" +
                         "2. Create Manager account \n" +
-                        "3. Create Admin account "
+                        "3. Create Admin account\n "+
+                        "4. Exit"
+                        
                 ));
             }catch(NumberFormatException e){
                 JOptionPane.showMessageDialog(null, "Invalid Option. Try again");
             }
-        }while(choice <= 0 || choice > 3);
+        }while(choice <= 0 || choice > 4) ;
         
         return choice;
     }

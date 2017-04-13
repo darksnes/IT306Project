@@ -21,6 +21,10 @@ public class Location {
     
     
     //constructor
+    
+    public Location(){
+        
+    }
     public Location(String locationId){
         this.locationId = locationId;
         setLocation(locationId);
