@@ -11,9 +11,11 @@ package employeetimekeepingapplication;
  */
 public class Admin extends Employee {
     
-    
+    public Admin(){
+        
+    }
     public Admin(String locationId){
-        super(locationId);
+        //super(locationId);
     }
     private String adminLoginId;
 
