@@ -25,10 +25,7 @@ public class Location {
     public Location(){
         
     }
-    public Location(String locationId){
-        this.locationId = locationId;
-        setLocation(locationId);
-    }
+
     
     //**BEHAVIORS**
     //accessors
@@ -53,24 +50,24 @@ public class Location {
     //mutators
     
     
-    public void setLocation(String locationId){//location id is a String of either 1,2, or 3.
-        if(locationId.equals('1')){
+    public void setLocation(int locationId){//location id is a String of either 1,2, or 3.
+        if(locationId == 1){
             this.title = "Factory 415";
             this.street = "123 Fake Street";
             this.city = "Nowhere";
             this.state = "NN";
             this.zipCode = "00111";
         }
-        else
-            if(locationId.equals('2')){
+   
+        if(locationId == 2){
                 this.title = "Research 221";
                 this.street = "123 Faker Street";
                 this.city = "Still Somewhere";
                 this.state = "NN";
                 this.zipCode = "00112";
             }
-        else
-             if(locationId.equals('3')){
+   
+        if(locationId == 3){
                 this.title = "Corporate 001";
                 this.street = "123 Non-Fake Street";
                 this.city = "Somewhere";
@@ -78,6 +75,9 @@ public class Location {
                 this.zipCode = "01010"; 
                 
               }
-        }
-       
+        
+    }  
+    public String toString(){
+        return "location ID: "+locationId; 
+    }
 }

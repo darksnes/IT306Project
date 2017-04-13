@@ -67,6 +67,9 @@ public class Employee {
     public void setPassword(String password){
         this.password = password;
     }
+    public void setLocation(int locationKey){
+        this.location.setLocation(locationKey);
+    }
     
     public void setID(){
         Random rand = new Random();
@@ -76,7 +79,7 @@ public class Employee {
     
     public String toString(){
         return "\nID: " + id + "\nName: " + firstName + "" + lastName +  
-                "\nHours Worked: " + hoursWorked + "\nSalary Earned: " + salary;
+                "\nHours Worked: " + hoursWorked + "\nSalary Earned: " + salary +"\n" + location;
                 
                 
     }

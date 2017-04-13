@@ -5,12 +5,8 @@
  */
 package employeetimekeepingapplication;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.FileWriter;
-import java.io.BufferedWriter;
-import java.util.LinkedList;
+import java.io.*;
+import java.util.*;
 import javax.swing.JOptionPane;
 
 /**
@@ -28,18 +24,53 @@ public class EmployeeTimekeepingApplication {
         if(!checkFileExists()){
             createFile();
         }
+        
         //store contents of file into linked list
-       
-        
-        
-       int item = -1;
+      fileToList(list);
+
+      /*chooses which user type. final version of app will select this based on the type of object has logged in
+      */
+      int choice = -1;
        do{
-            item = choiceMenu();
- 
-       }while(item !=4);
-      //  
+            try{
+                choice = Integer.parseInt(JOptionPane.showInputDialog("Which Account is logging in? \n" + 
+                        "1. Employee account (still in progress) \n" +
+                        "2. Manager account (still in progress) \n" +
+                        "3. Admin account\n "+
+                        "4. Exit"
+                        
+                ));
+            }catch(NumberFormatException e){
+                JOptionPane.showMessageDialog(null, "Invalid Option. Try again");
+            }
+            if(choice == 2){
+              managerMenu(list);  
+            }            
+            if(choice == 3){
+              adminMenu(list);  
+            }
+
+            
+        }while(choice != 4) ;
+
     }
     
+    private static void managerMenu(SLinkedList list){
+        
+    }
+    
+    private static void fileToList(SLinkedList list){
+       Scanner inputStream; 
+       
+       try{
+           inputStream = new Scanner(new FileInputStream("database.txt"));
+           inputStream.close();
+       }catch(FileNotFoundException e){
+           System.out.println(e);
+           System.exit(1);
+       }
+       
+    }
     private static void addEmployee(SLinkedList list, int choice){
         Employee employee = null;
         switch(choice){
@@ -78,7 +109,7 @@ public class EmployeeTimekeepingApplication {
     
     private static void addLocation(Employee employee){
         int id = locationMenu();
-        employee.getLocation().setLocation(Integer.toString(id));
+        employee.getLocation().setLocation(id);
     }
     
     private static int locationMenu(){
@@ -157,7 +188,7 @@ public class EmployeeTimekeepingApplication {
         return choice;
     }
     
-    private static int choiceMenu(){
+    private static void createUserMenu(SLinkedList list){
         int choice = 0;
         do{
             try{
@@ -173,7 +204,54 @@ public class EmployeeTimekeepingApplication {
             }
         }while(choice <= 0 || choice > 4) ;
         
-        return choice;
+       addEmployee(list,choice);
+        
+        
+    }
+    private static void adminMenu(SLinkedList list){
+        int choice = 0;
+        do{
+            try{
+                choice = Integer.parseInt(JOptionPane.showInputDialog("Administrator Menu: \n" + 
+                        "1. Create Account \n" +
+                        "2. Manage User \n" +
+                        "3. View Disabled Users \n "+
+                        "4. Logout\n"+
+                        "5. Display All Users (for testing)"+
+                        "6. Sort All Users"
+                        
+                ));
+                
+                if(choice == 1){
+                    createUserMenu(list);
+                }
+                if(choice == 5){
+                    printAll(list);
+                }
+                if(choice ==6){
+                    sortUsers(list);
+                }
+                
+       
+            }catch(NumberFormatException e){
+                JOptionPane.showMessageDialog(null, "Invalid Option. Try again");
+            }
+        }while(choice != 4) ;
+        
+
+        
+      
+    }
+    //PRINTS ALL EMPLOYEE OBJECTS FOR TESTING PURPOSES***
+    private static void printAll(SLinkedList list){
+        String output = "";
+        while(!list.isEmpty()){
+           output += list.remove() + "\n";
+        }
+        JOptionPane.showMessageDialog(null, output);
+    }
+    private static void sortUsers(SLinkedList list){
+        
     }
     
     
