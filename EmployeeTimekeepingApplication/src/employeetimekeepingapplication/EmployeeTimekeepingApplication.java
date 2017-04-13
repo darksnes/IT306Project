@@ -5,16 +5,8 @@
  */
 package employeetimekeepingapplication;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.util.*;
 import javax.swing.JOptionPane;
 
 /**
@@ -24,43 +16,26 @@ import javax.swing.JOptionPane;
 public class EmployeeTimekeepingApplication {
 
     public static void main(String[] args){
-        
-        //create linked list
         SLinkedList list = new SLinkedList();
         
-<<<<<<< .merge_file_0dnicT
         
-        Employee employee = new Employee();
-        employee.setFirstName("John");
-        employee.setPassword("oleole123");
-        employee.setID();
-        SNode node = new SNode(employee,null);
-        list.add(node);
-        writeToFile("database.txt",employee);
-        Employee n = login(employee.getId(),"oleole123",list);
-        System.out.println(n.getFirstName());
-        
-        
-        
-        
-        
-        
-=======
-        //if file does not exist, create file
-        if(!checkFileExists()){
-            createFile();
-        }
-        //store contents of file into linked list
+       Employee employee1 = new Employee();
+       Employee employee2 = new Employee();
+       Employee employee3 = new Employee();
+       employee1.setFirstName("J");
+       employee2.setFirstName("D");
+       employee3.setFirstName("Aditya");
        
->>>>>>> .merge_file_SNbG7T
+       SNode node1 = new SNode(employee1,null);
+       SNode node2 = new SNode(employee2,null);
+       SNode node3 = new SNode(employee3,null);
+       
+       list.add(node1);
+       list.add(node2);
         
-        
-       int item = -1;
-       do{
-            item = choiceMenu();
- 
-       }while(item !=4);
-      //  
+       System.out.println(list.getHead().getData().getFirstName());
+       sortUsers(list);
+       System.out.println(list.getHead().getData().getFirstName());
     }
     
     private static void addEmployee(SLinkedList list, int choice){
@@ -86,8 +61,9 @@ public class EmployeeTimekeepingApplication {
         employee.setLastName(JOptionPane.showInputDialog("Enter last name: "));
         employee.setPassword(JOptionPane.showInputDialog("Enter password: "));
         
-        addAddress(employee);
-        addLocation(employee);
+        if(employee instanceof Manager){
+            System.out.println("working");
+        }
         
     }
     
@@ -193,14 +169,12 @@ public class EmployeeTimekeepingApplication {
                 choice = Integer.parseInt(JOptionPane.showInputDialog("Enter Number Option: \n" + 
                         "1. Create Employee account \n" +
                         "2. Create Manager account \n" +
-                        "3. Create Admin account\n "+
-                        "4. Exit"
-                        
+                        "3. Create Admin account "
                 ));
             }catch(NumberFormatException e){
                 JOptionPane.showMessageDialog(null, "Invalid Option. Try again");
             }
-        }while(choice <= 0 || choice > 4) ;
+        }while(choice <= 0 || choice > 3);
         
         return choice;
     }
@@ -236,6 +210,23 @@ public class EmployeeTimekeepingApplication {
         return statusCode;
     }
     
+    public static void sortUsers(SLinkedList list){
+        SNode node = list.getHead().getNext();
+        
+        while(node != null){
+            SNode temp = node;
+            SNode first = list.getHead();
+            
+            while(first != null && temp.getData().getFirstName().compareToIgnoreCase(first.getData().getFirstName()) > 0){
+                first.setNext(temp.getNext());
+                temp.setNext(first);
+                
+                first = first.getNext();
+            }
+            node = node.getNext();
+        }
+    }
+    
     
     
     
@@ -243,3 +234,4 @@ public class EmployeeTimekeepingApplication {
     
     
 }
+
