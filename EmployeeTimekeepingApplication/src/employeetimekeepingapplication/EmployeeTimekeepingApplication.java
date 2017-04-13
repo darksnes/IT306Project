@@ -5,12 +5,16 @@
  */
 package employeetimekeepingapplication;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.FileWriter;
-import java.io.BufferedWriter;
-import java.util.LinkedList;
 import javax.swing.JOptionPane;
 
 /**
@@ -22,8 +26,22 @@ public class EmployeeTimekeepingApplication {
     public static void main(String[] args){
         SLinkedList list = new SLinkedList();
         
-        int item = choiceMenu();
-        addEmployee(list,item);
+        
+        Employee employee = new Employee();
+        employee.setFirstName("John");
+        employee.setPassword("oleole123");
+        employee.setID();
+        SNode node = new SNode(employee,null);
+        list.add(node);
+        writeToFile("database.txt",employee);
+        Employee n = login(employee.getId(),"oleole123",list);
+        System.out.println(n.getFirstName());
+        
+        
+        
+        
+        
+        
         
         
     }
@@ -114,15 +132,21 @@ public class EmployeeTimekeepingApplication {
         }
     }
     
-    private static void login(String filepath){
+    private static Employee login(String userID, String pass,SLinkedList list){
+        int code = searchTextFile(userID, pass);
+        Employee employee = null;
+        if(code == 1){
+            employee = list.getSpecific(userID);
+        }
         
+        return employee;
     }
     
     private static void writeToFile(String filepath, Employee employee){
         PrintWriter pr = null;
         try{
             pr = new PrintWriter(new BufferedWriter(new FileWriter(new File(filepath), true)));
-            pr.println("Testing");
+            pr.println(employee.getId() + " oleole123" + " enabled");
             
         }catch(IOException e){
             e.printStackTrace();
@@ -162,6 +186,41 @@ public class EmployeeTimekeepingApplication {
         
         return choice;
     }
+    
+    private static int searchTextFile(String userID, String password){
+        File data = new File("database.txt");
+        int statusCode = -2;
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(data));
+            String line;
+            while((line = br.readLine()) != null){
+                String[] dataSet = line.split(" ");
+                if(dataSet[0].equals(userID) && dataSet[1].equals(password) && dataSet[2].equals("enabled")){
+                    statusCode = 1;
+                    return statusCode;
+                }
+                else if(dataSet[0].equals(userID) && dataSet[1].equals(password) && !dataSet[2].equals("enabled")){
+                    statusCode = 0;
+                    return statusCode;
+                }
+                else if(dataSet[0].equals(userID) && !dataSet[1].equals(password)){
+                    statusCode = -1;
+                    return statusCode;
+                }
+                
+                
+            }
+            
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        
+        return statusCode;
+    }
+    
+    
+    
+    
     
     
     
