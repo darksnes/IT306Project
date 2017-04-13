@@ -18,6 +18,38 @@ public class EmployeeTimekeepingApplication {
     public static void main(String[] args){
         SLinkedList list = new SLinkedList();
         
+             //if file does not exist, create file
+        if(!checkFileExists()){
+            createFile();
+        }
+        
+        //store contents of file into linked list
+      fileToList(list);
+
+      /*chooses which user type. final version of app will select this based on the type of object has logged in
+      */
+      int choice = -1;
+       do{
+            try{
+                choice = Integer.parseInt(JOptionPane.showInputDialog("Which Account is logging in? \n" + 
+                        "1. Employee account (still in progress) \n" +
+                        "2. Manager account (still in progress) \n" +
+                        "3. Admin account\n "+
+                        "4. Exit"
+                        
+                ));
+            }catch(NumberFormatException e){
+                JOptionPane.showMessageDialog(null, "Invalid Option. Try again");
+            }
+            if(choice == 2){
+              managerMenu(list);  
+            }            
+            if(choice == 3){
+              adminMenu(list);  
+            }
+
+            
+        }while(choice != 4);
         
       
     }
@@ -179,6 +211,25 @@ public class EmployeeTimekeepingApplication {
         }while(choice <= 0 || choice > 3);
         
         return choice;
+    }
+    
+    private static void createUserMenu(SLinkedList list){
+        int choice = 0;
+        do{
+            try{
+                choice = Integer.parseInt(JOptionPane.showInputDialog("Enter Number Option: \n" + 
+                        "1. Create Employee account \n" +
+                        "2. Create Manager account \n" +
+                        "3. Create Admin account\n "+
+                        "4. Exit"
+                        
+                ));
+            }catch(NumberFormatException e){
+                JOptionPane.showMessageDialog(null, "Invalid Option. Try again");
+            }
+        }while(choice <= 0 || choice > 4) ;
+        
+       addEmployee(list,choice);
     }
     
     private static int searchTextFile(String userID, String password){
