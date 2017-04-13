@@ -19,24 +19,26 @@ public class EmployeeTimekeepingApplication {
         SLinkedList list = new SLinkedList();
         
         
-       Employee employee1 = new Employee();
-       Employee employee2 = new Employee();
-       Employee employee3 = new Employee();
-       employee1.setFirstName("J");
-       employee2.setFirstName("D");
-       employee3.setFirstName("Aditya");
-       
-       SNode node1 = new SNode(employee1,null);
-       SNode node2 = new SNode(employee2,null);
-       SNode node3 = new SNode(employee3,null);
-       
-       list.add(node1);
-       list.add(node2);
-        
-       System.out.println(list.getHead().getData().getFirstName());
-       sortUsers(list);
-       System.out.println(list.getHead().getData().getFirstName());
+      
     }
+    
+    private static void managerMenu(SLinkedList list){
+        
+    }
+    
+    private static void fileToList(SLinkedList list){
+       Scanner inputStream; 
+       
+       try{
+           inputStream = new Scanner(new FileInputStream("database.txt"));
+           inputStream.close();
+       }catch(FileNotFoundException e){
+           System.out.println(e);
+           System.exit(1);
+       }
+       
+    }
+
     
     private static void addEmployee(SLinkedList list, int choice){
         Employee employee = null;
@@ -209,29 +211,66 @@ public class EmployeeTimekeepingApplication {
         
         return statusCode;
     }
-    
-    public static void sortUsers(SLinkedList list){
-        SNode node = list.getHead().getNext();
-        
-        while(node != null){
-            SNode temp = node;
-            SNode first = list.getHead();
-            
-            while(first != null && temp.getData().getFirstName().compareToIgnoreCase(first.getData().getFirstName()) > 0){
-                first.setNext(temp.getNext());
-                temp.setNext(first);
+      private static void adminMenu(SLinkedList list){
+        int choice = 0;
+        do{
+            try{
+                choice = Integer.parseInt(JOptionPane.showInputDialog("Administrator Menu: \n" + 
+                        "1. Create Account \n" +
+                        "2. Manage User \n" +
+                        "3. View Disabled Users \n "+
+                        "4. Logout\n"+
+                        "5. Display All Users (for testing)"+
+                        "6. Sort All Users"
+                        
+                ));
                 
-                first = first.getNext();
+                if(choice == 1){
+                    createUserMenu(list);
+                }
+                if(choice == 5){
+                    printAll(list);
+                }
+                if(choice ==6){
+                    sortUsers(list);
+                }
+                
+       
+            }catch(NumberFormatException e){
+                JOptionPane.showMessageDialog(null, "Invalid Option. Try again");
             }
-            node = node.getNext();
-        }
+        }while(choice != 4) ;
+        
+
+        
+      
     }
+    //PRINTS ALL EMPLOYEE OBJECTS FOR TESTING PURPOSES***
+    private static void printAll(SLinkedList list){
+        String output = "";
+        while(!list.isEmpty()){
+           output += list.remove() + "\n";
+        }
+        JOptionPane.showMessageDialog(null, output);
+    }
+    private static void sortUsers(SLinkedList list){
+        
+
     
-    
-    
-    
-    
-    
+    public static SLinkedList sortUsers(SLinkedList list){
+         SLinkedList sortedList = new SLinkedList();
+         
+         if(list.getSize() == 1){
+             sortedList.add(list.getHead());
+             return sortedList;
+         }
+         SNode previous = list.getHead();
+         SNode current = list.getHead().getNext();
+         
+         
+    }
+       
     
 }
+    
 
