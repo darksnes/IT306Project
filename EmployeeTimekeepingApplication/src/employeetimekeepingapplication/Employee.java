@@ -78,6 +78,20 @@ public class Employee {
         Random rand = new Random();
         this.id = this.firstName.substring(0,3) + rand.nextInt(2000);
     }
+    
+    public void setID(String id){
+        this.id = id;
+    }
+    public boolean setHoursWorked(int hoursWorked){
+        if(hoursWorked >= 0 && hoursWorked < 100000 ){
+                this.hoursWorked = hoursWorked;
+                return true;
+        }
+        else{
+            return false; 
+        }
+    
+    }
 
     
     

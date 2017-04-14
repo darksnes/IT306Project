@@ -12,7 +12,7 @@ package employeetimekeepingapplication;
 public class Admin extends Employee {
     
     public Admin(){
-        
+        super();
     }
     public Admin(String locationId){
         //super(locationId);
