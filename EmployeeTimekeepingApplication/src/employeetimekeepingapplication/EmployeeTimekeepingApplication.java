@@ -191,8 +191,25 @@ public class EmployeeTimekeepingApplication {
     
   //  public static void writeDefaultAdd()
     
-    private static void login(String filepath){
+    private static Employee login(String userID, String password, SLinkedList list){// login method 
+        int code = searchTextFile(userID, password);
+        Employee employee = null;
         
+        if(code == 1){
+            employee = list.getSpecific(userID);
+            return employee;
+        }
+        else if(code == 0){
+            JOptionPane.showMessageDialog(null, "Account disabled");
+        }
+        else if(code == -1){
+            JOptionPane.showMessageDialog(null, "Incorrect password");
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Account does not exist.");
+        }
+        
+        return null;
     }
     
     private static void checkIfFileEmpty(String filepath){// if file is empty adds admin account
@@ -217,9 +234,9 @@ public class EmployeeTimekeepingApplication {
         PrintWriter pr = null;
         try{
             pr = new PrintWriter(new BufferedWriter(new FileWriter(new File(filepath), true)));
-            pr.println(employee.getId() + " " + employee.getPassword() + " " + employee.getFirstName() +
-                        " " + employee.getLastName() + " " + " " + employee.getHoursWorked() + " " +
-                            employee.getLocation() + " " + employee.getAddress()
+            pr.println(employee.getId() + "," + employee.getPassword() + "," + employee.getFirstName() +
+                        "," + employee.getLastName() + "," + "," + employee.getHoursWorked() + " " +
+                            employee.getLocation() + "," + employee.getAddress() + "," + "enabled"
                             );
             
         }catch(IOException e){
@@ -320,6 +337,38 @@ public class EmployeeTimekeepingApplication {
         }
         JOptionPane.showMessageDialog(null, output);
     }
+    
+    private static int searchTextFile(String userID, String password){// earches file for the specified login
+        File data = new File("database.txt");
+        int statusCode = -2;
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(data));
+            String line;
+            while((line = br.readLine()) != null){
+                String[] dataSet = line.split(" ");
+                if(dataSet[0].equals(userID) && dataSet[1].equals(password) && dataSet[dataSet.length-1].equals("enabled")){
+                    statusCode = 1; //status code 1 everything is good.
+                    return statusCode;
+                }
+                else if(dataSet[0].equals(userID) && dataSet[1].equals(password) && !dataSet[dataSet.length-1].equals("enabled")){
+                    statusCode = 0;
+                    return statusCode;
+                }
+                else if(dataSet[0].equals(userID) && !dataSet[1].equals(password)){
+                    statusCode = -1;
+                    return statusCode;
+                }
+                
+                
+            }
+            
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        
+        return statusCode;
+    }
+
     
      
 
