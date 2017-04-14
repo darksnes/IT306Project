@@ -1,7 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+Phase 5 - Preliminary System.
+
+This current version of the program 
  */
 package employeetimekeepingapplication;
 
@@ -65,28 +65,24 @@ public class EmployeeTimekeepingApplication {
 
     }
 
-    public static SLinkedList sort(SLinkedList list){
-        
-
-
-
-            for(SNode index = list.getHead(); index != null; index = index.getNext()){
-                SNode min = index;
-                for(SNode index2 = index.getNext(); index2 != null; index2 = index2.getNext()){
-                    if(index2.getData().getLastName().compareToIgnoreCase(min.getData().getLastName()) < 0){
-                        min = index2;
-
-                    }
-                    SNode temp = index;
-                    index.setData(min.getData());
-                    min.setData(temp.getData());
-
+     public static SLinkedList sort(SLinkedList list){ // working code!!
+        SNode min;
+        Employee temp;
+        for(SNode index = list.getHead(); index != null; index = index.getNext()){
+            min = index;
+            for(SNode index2 = index.getNext(); index2 != null; index2 = index2.getNext()){
+                if(index2.getData().getLastName().compareToIgnoreCase(min.getData().getLastName()) < 0){
+                    min = index2;
                 }
             }
-            JOptionPane.showMessageDialog(null,"list has been sorted");
-           
+            if(index != min){
+                temp = index.getData();
+                index.setData(min.getData());
+                min.setData(temp);
+            }
+        }
         return list;
-    }     
+    }       
     private static void managerMenu(SLinkedList list){
         int choice = 0;
         do{
@@ -171,6 +167,9 @@ public class EmployeeTimekeepingApplication {
                 list = sort(list);
                 printAll(list);
             }
+            if(choice ==3){
+                printAll(list);
+            }
         }while(choice != 4);
         
         
@@ -207,15 +206,25 @@ public class EmployeeTimekeepingApplication {
     }
     
     private static void createEmployee(Employee employee){
-     //   employee.setFirstName(JOptionPane.showInputDialog("Enter first name:"));
+
+        employee.setFirstName(JOptionPane.showInputDialog("Enter first name:"));
         employee.setLastName(JOptionPane.showInputDialog("Enter last name: "));
-     //   employee.setPassword(JOptionPane.showInputDialog("Enter password: "));
+        employee.setID();
+        employee.setPassword(JOptionPane.showInputDialog("Enter password: "));
+        boolean valid = false;
+        do{
+            try{
+                  valid = employee.setHoursWorked(Integer.parseInt(JOptionPane.showInputDialog("Enter hours worked")));    
+            }catch(NumberFormatException e){
+                JOptionPane.showMessageDialog(null,"Invalid input. Try again");
+            }
+        }while(!valid);
         
-     //   addAddress(employee);
-     //   addLocation(employee);
+        addAddress(employee);
+        addLocation(employee);
         
+      
     }
-    
     private static void addAddress(Employee employee){
         employee.getAddress().setStreet(JOptionPane.showInputDialog("Enter Street name: "));
         employee.getAddress().setAptNum(JOptionPane.showInputDialog("Enter apt num: "));
@@ -262,6 +271,7 @@ public class EmployeeTimekeepingApplication {
         else{
             try{
                 File file = new File("database.txt");
+           //     createDefaultAdmin();
                 
                 if(file.createNewFile()){
                     JOptionPane.showMessageDialog(null, "Creating database");
@@ -278,21 +288,7 @@ public class EmployeeTimekeepingApplication {
     private static void login(String filepath){
         
     }
-    
-    private static void writeToFile(String filepath, Employee employee){
-        PrintWriter pr = null;
-        try{
-            pr = new PrintWriter(new BufferedWriter(new FileWriter(new File(filepath), true)));
-            pr.println("Testing");
-            
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-        finally{
-            pr.close();
-        }
-    }
-    
+   
     private static int mainMenu(){
         int choice = 0;
         do{
@@ -383,7 +379,48 @@ public class EmployeeTimekeepingApplication {
             }    
         }
 
+    //write to file method
     
+    /*
+    
+    private static void createDefaultAdmin(File filepath){
+        PrintWriter pr = null;
+        try{
+            pr = new PrintWriter(new BufferedWriter(filepath), true)));
+            pr.println(employee.getId() + " " + employee.getPassword() + " " + employee.getFirstName() +
+                        " " + employee.getLastName() + " " + " " + employee.getHoursWorked() + " " +
+                            employee.getLocation() + " " + employee.getAddress()
+                            );
+            
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        finally{
+            pr.close();
+        }       
+        
+        
+        
+    }
+
+    */
+    private static void writeToFile(String filepath, Employee employee){ // adds object to the files. 
+        PrintWriter pr = null;
+        try{
+            pr = new PrintWriter(new BufferedWriter(new FileWriter(new File(filepath), true)));
+            pr.println(employee.getId() + " " + employee.getPassword() + " " + employee.getFirstName() +
+                        " " + employee.getLastName() + " " + " " + employee.getHoursWorked() + " " +
+                            employee.getLocation() + " " + employee.getAddress()
+                            );
+            
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        finally{
+            pr.close();
+        }
+    }
+        
     
     
 }

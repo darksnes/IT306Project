@@ -12,7 +12,7 @@ package employeetimekeepingapplication;
 public class Location {
     //**ATTRIBUTES**
     
-    private String locationId;
+    private int locationId;
     private String title;
     private String street;
     private String city;
@@ -29,7 +29,7 @@ public class Location {
     
     //**BEHAVIORS**
     //accessors
-    public String getLocationId(){
+    public int getLocationId(){
         return locationId;
     }
     public String getTitle(){
@@ -52,6 +52,7 @@ public class Location {
     
     public void setLocation(int locationId){//location id is a String of either 1,2, or 3.
         if(locationId == 1){
+            this.locationId = locationId;
             this.title = "Factory 415";
             this.street = "123 Fake Street";
             this.city = "Nowhere";
@@ -60,6 +61,7 @@ public class Location {
         }
    
         if(locationId == 2){
+                this.locationId = locationId;
                 this.title = "Research 221";
                 this.street = "123 Faker Street";
                 this.city = "Still Somewhere";
@@ -68,6 +70,7 @@ public class Location {
             }
    
         if(locationId == 3){
+                this.locationId = locationId;
                 this.title = "Corporate 001";
                 this.street = "123 Non-Fake Street";
                 this.city = "Somewhere";

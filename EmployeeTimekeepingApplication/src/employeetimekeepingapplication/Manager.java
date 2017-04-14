@@ -23,7 +23,7 @@ public class Manager extends Employee {
    
    public String generateReport(SLinkedList list){
        
-       String locationId = this.getLocation().getLocationId();
+       int locationId = this.getLocation().getLocationId();
        String report = "";
        
        //no employees in program

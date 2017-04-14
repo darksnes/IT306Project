@@ -62,7 +62,7 @@ public class Employee {
     
     //mutators
     public void setFirstName(String firstName){
-        this.firstName = firstName;
+        this.firstName = firstName + " ";
     }
     public void setLastName(String lastName){
         this.lastName = lastName;
@@ -76,14 +76,24 @@ public class Employee {
     
     public void setID(){
         Random rand = new Random();
-        this.id = this.firstName.substring(0,3) + rand.nextInt(2000);
+        this.id = this.lastName.substring(0,2) + rand.nextInt(2000);
+    }
+    public boolean setHoursWorked(int hoursWorked){
+        if(hoursWorked >= 0 && hoursWorked < 100000 ){
+                this.hoursWorked = hoursWorked;
+                return true;
+        }
+        else{
+            return false; 
+        }
+    
     }
 
     
     
     public String toString(){
         return "\nID: " + id + "\nName: " + firstName + "" + lastName +  
-                "\nHours Worked: " + hoursWorked + "\nSalary Earned: " + salary +"\n" + location;
+                "\nHours Worked: " + hoursWorked + "\nSalary Earned: " + salary +"\n" + "Location: " + location.getLocationId();
                 
                 
     }
