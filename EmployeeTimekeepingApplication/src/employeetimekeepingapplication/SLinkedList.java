@@ -21,9 +21,23 @@ public class SLinkedList {
 		size++;
 		if(head==null) head = node; //if the linkedlist is empty
 		else{
-			node.setNext(head);
-                        head = node;
+			SNode curr = head; 
+			//if there is only one node in the linkedlist:
+			if(!curr.hasNext()) {
+				curr.setNext(node);
+				//curr= node; 
+			}
+			
+			//if there are multiple nodes inside the linkedlist
+			else{
+				//we need a loop
+				while(curr.hasNext()){
+					curr = curr.getNext(); 
+				}
+				curr.setNext(node);
+			}
 		}
+		
 		
 	}
 	
@@ -74,26 +88,10 @@ public class SLinkedList {
         public SNode getHead(){
             return head;
         }
-<<<<<<< HEAD
         
         public void removeSpecific(SNode node){
             
         }
-=======
-        public Employee getSpecific(String userID){  //gets the object that has same userID as login.
-            SNode node = head;
-            
-            while(node != null){
-                if(node.getData().getId().equals(userID)){
-                    return node.getData();
-                }
-                node = node.getNext();
-            }
-            
-            return null;
-        } 
-        
->>>>>>> 5b72f7ad97027e43260b0db744d5b3c4216bc11a
 
 	
 
