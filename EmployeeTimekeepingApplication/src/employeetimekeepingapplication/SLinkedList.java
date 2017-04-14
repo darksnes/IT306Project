@@ -21,21 +21,8 @@ public class SLinkedList {
 		size++;
 		if(head==null) head = node; //if the linkedlist is empty
 		else{
-			SNode curr = head; 
-			//if there is only one node in the linkedlist:
-			if(!curr.hasNext()) {
-				curr.setNext(node);
-				//curr= node; 
-			}
-			
-			//if there are multiple nodes inside the linkedlist
-			else{
-				//we need a loop
-				while(curr.hasNext()){
-					curr = curr.getNext(); 
-				}
-				curr.setNext(node);
-			}
+			node.setNext(head);
+                        head = node;
 		}
 		
 	}

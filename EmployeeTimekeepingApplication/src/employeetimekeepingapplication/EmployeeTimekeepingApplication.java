@@ -44,7 +44,8 @@ public class EmployeeTimekeepingApplication {
       
 
       
-       SLinkedList list2 = sortUsers(list);
+       
+      printAll(list);
        
        
       
@@ -284,7 +285,7 @@ public class EmployeeTimekeepingApplication {
                     printAll(list);
                 }
                 if(choice ==6){
-                    sortUsers(list);
+                    sort(list);
                 }
                 
        
@@ -299,9 +300,11 @@ public class EmployeeTimekeepingApplication {
     }
     //PRINTS ALL EMPLOYEE OBJECTS FOR TESTING PURPOSES***
     private static void printAll(SLinkedList list){
+        SNode node = list.getHead();
         String output = "";
-        while(!list.isEmpty()){
-           output += list.remove() + "\n";
+        while(node != null){
+           output += node.getData() + "\n";
+           node = node.getNext();
         }
         JOptionPane.showMessageDialog(null, output);
     }
@@ -309,22 +312,23 @@ public class EmployeeTimekeepingApplication {
         
     
     
-    public static SLinkedList sortUsers(SLinkedList list){
+    public static SLinkedList sort(SLinkedList list){
         SLinkedList list2 = new SLinkedList();
-        SNode head = list.getHead();
-        for(SNode index = head; index != null; index = index.getNext()){
+        
+        for(SNode index = list.getHead(); index != null; index = index.getNext()){
             SNode min = index;
             for(SNode index2 = index.getNext(); index2 != null; index2 = index2.getNext()){
                 if(index2.getData().getLastName().compareToIgnoreCase(min.getData().getLastName()) < 0){
                     min = index2;
                     
                 }
+                SNode temp = index;
+                index.setData(min.getData());
+                min.setData(temp.getData());
                 
             }
-            
-            
         }
-        return list2;
+        return list;
     }
 }
     
