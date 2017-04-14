@@ -87,6 +87,10 @@ public class SLinkedList {
         public SNode getHead(){
             return head;
         }
+        
+        public void removeSpecific(SNode node){
+            
+        }
 
 	
 

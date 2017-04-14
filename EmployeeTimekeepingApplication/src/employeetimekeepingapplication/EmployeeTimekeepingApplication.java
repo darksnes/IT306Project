@@ -19,28 +19,7 @@ public class EmployeeTimekeepingApplication {
         SLinkedList list = new SLinkedList();
         
              //if file does not exist, create file
-       int choice = -1;
-       do{
-            try{
-                choice = Integer.parseInt(JOptionPane.showInputDialog("Which Account is logging in? \n" + 
-                        "1. Employee account (still in progress) \n" +
-                        "2. Manager account (still in progress) \n" +
-                        "3. Admin account\n "+
-                        "4. Exit"
-                        
-                ));
-            }catch(NumberFormatException e){
-                JOptionPane.showMessageDialog(null, "Invalid Option. Try again");
-            }
-            if(choice == 2){
-              managerMenu(list);  
-            }            
-            if(choice == 3){
-              adminMenu(list);  
-            }
-
-            
-        }while(choice != 4);
+       
 
 
 
@@ -61,7 +40,7 @@ public class EmployeeTimekeepingApplication {
       
        System.out.println(list.getHead().getData().getLastName());
       
-      SLinkedList list2 = sortUsers(list);
+      SLinkedList list2 = sort(list);
       
       System.out.println(list2.getHead().getData().getLastName());
       
@@ -322,25 +301,34 @@ public class EmployeeTimekeepingApplication {
     }
     
         
-    public static SLinkedList sortUsers(SLinkedList list){
-         SLinkedList sortedList = new SLinkedList();
-         sortedList.add(list.getHead());
+    public static SNode sortUsers(SLinkedList list){
+         SNode min = list.getHead();
+         SNode node;
          
-         SNode current = sortedList.getHead();
-         SNode previous = current;
-         
-         if(sortedList.getSize() == 1){
-             if(list.getHead().getNext().getData().getLastName().compareToIgnoreCase(current.getData().getLastName()) > 0){
-                 current = list.getHead().getNext();
-                 current.setNext(previous);
-             }
-             else{
-                 current.setNext(list.getHead().getNext());
+         for(node = list.getHead().getNext();node != null;node = node.getNext()){
+             if(node.getData().getLastName().compareToIgnoreCase(min.getData().getLastName()) < 0){
+                 min = node;
              }
          }
+         SNode temp = min;
          
-       
-        return sortedList;
+         return min;
+    }
+    
+    public static SLinkedList sort(SLinkedList list){
+        SLinkedList list2 = new SLinkedList();
+        SNode head = list.getHead();
+        for(SNode index = head; index != null; index = index.getNext()){
+            SNode min = index;
+            for(SNode index2 = min.getNext(); index2 != null; index2 = index2.getNext()){
+                if(index.getData().getLastName().compareToIgnoreCase(min.getData().getLastName()) < 0){
+                    min = index2;
+                    list2.add(min);
+                }
+            }
+            
+        }
+        return list2;
     }
 }
     
