@@ -19,10 +19,35 @@ public class EmployeeTimekeepingApplication {
         SLinkedList list = new SLinkedList();
         
              //if file does not exist, create file
-       
+       int choice = -1;
+       do{
+            try{
+                choice = Integer.parseInt(JOptionPane.showInputDialog("Which Account is logging in? \n" + 
+                        "1. Employee account (still in progress) \n" +
+                        "2. Manager account (still in progress) \n" +
+                        "3. Admin account\n "+
+                        "4. Exit"
+                        
+                ));
+            }catch(NumberFormatException e){
+                JOptionPane.showMessageDialog(null, "Invalid Option. Try again");
+            }
+            if(choice == 2){
+              managerMenu(list);  
+            }            
+            if(choice == 3){
+              adminMenu(list);  
+            }
+
+            
+        }while(choice != 4);
+
+
 
       /*chooses which user type. final version of app will select this based on the type of object has logged in
       */
+      
+      
       Employee employee = new Employee();
       employee.setLastName("D");
       Employee employee2 = new Employee();
