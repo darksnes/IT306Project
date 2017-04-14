@@ -74,6 +74,19 @@ public class SLinkedList {
         public SNode getHead(){
             return head;
         }
+        public Employee getSpecific(String userID){  //gets the object that has same userID as login.
+            SNode node = head;
+            
+            while(node != null){
+                if(node.getData().getId().equals(userID)){
+                    return node.getData();
+                }
+                node = node.getNext();
+            }
+            
+            return null;
+        } 
+        
 
 	
 
