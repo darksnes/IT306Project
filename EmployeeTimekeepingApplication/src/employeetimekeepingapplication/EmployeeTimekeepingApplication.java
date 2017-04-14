@@ -1,7 +1,21 @@
 /*
 Phase 5 - Preliminary System.
+David Brown & Aditya Tornala
 
-This current version of the program 
+
+This current version of the program contains all of the features that the final
+program will contain, but it does not retreive data from the text file yet. 
+
+
+**When the program is run for the first time and the database(text file) is created, the user will have to
+log into a default Admin account in order to start adding employees to the database the credentials for this default admin
+account is :
+
+*******************
+Username: admin
+Password: 123
+*******************
+
  */
 package employeetimekeepingapplication;
 
@@ -9,10 +23,6 @@ import java.io.*;
 import java.util.*;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author Dave
- */
 public class EmployeeTimekeepingApplication {
 
     public static void main(String[] args){
@@ -28,14 +38,11 @@ public class EmployeeTimekeepingApplication {
         //store contents of file into linked list
       fileToList(list);
       
-  
+      addAdminToList(list);
+      loginMenu(list);
 
       /*chooses which user type. final version of app will select this based on the type of object has logged in
-      */
-      
-
-      
-      
+ 
       int choice = -1;
        do{
             try{
@@ -62,9 +69,38 @@ public class EmployeeTimekeepingApplication {
             
         }while(choice != 4) ;
       
-
+          */
     }
 
+    
+    public static void loginMenu(SLinkedList list){
+        
+       
+        Employee test = null;
+        do{
+        
+            String userName = JOptionPane.showInputDialog("enter username");
+            String password = JOptionPane.showInputDialog("enter password");
+
+            test = login(userName,password, list);
+        }while(test == null);
+        
+ 
+  
+        if(test instanceof Employee){
+            employeeMenu(list);
+        }
+        if(test instanceof Manager){
+            managerMenu(list);
+        }
+        if(test instanceof Admin){
+            adminMenu(list);
+        }
+        
+      
+        
+    }
+    
      public static SLinkedList sort(SLinkedList list){ // working code!!
         SNode min;
         Employee temp;
@@ -271,24 +307,72 @@ public class EmployeeTimekeepingApplication {
         else{
             try{
                 File file = new File("database.txt");
-           //     createDefaultAdmin();
-                
                 if(file.createNewFile()){
                     JOptionPane.showMessageDialog(null, "Creating database");
+                    checkIfFileEmpty("database.txt");
                 }
             }catch(IOException e){
                 e.printStackTrace();
             }
             
         }
+        
+    }
+    
+    //adds the default admin in the text file to the linked list
+    private static void addAdminToList(SLinkedList list){
+        Admin defaultAdmin = new Admin();
+        defaultAdmin.setID("admin");
+        defaultAdmin.setPassword("123");
+        
+        SNode admin = new SNode(defaultAdmin, null);
+        list.add(admin);
+        
     }
     
   //  public static void writeDefaultAdd()
     
-    private static void login(String filepath){
+    private static Employee login(String userID, String password, SLinkedList list){// login method 
+        int code = searchTextFile(userID, password);
+        Employee employee = null;
         
+        if(code == 1){
+            employee = list.getSpecific(userID);
+            return employee;
+        }
+        else if(code == 0){
+            JOptionPane.showMessageDialog(null, "Account disabled");
+        }
+        else if(code == -1){
+            JOptionPane.showMessageDialog(null, "Incorrect password");
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Account does not exist.");
+        }
+        
+        return null;
     }
-   
+    
+    
+    private static void checkIfFileEmpty(String filepath){// if file is empty adds admin account
+        File file = new File(filepath);
+        
+        if(file.length() == 0){
+            PrintWriter pr = null;
+            try{
+            pr = new PrintWriter(new BufferedWriter(new FileWriter(new File(filepath), true)));
+            pr.println("admin" + ","+ "123" + "," + "enabled");
+            
+            
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        finally{
+            pr.close();
+        }
+        }
+    }
+      
     private static int mainMenu(){
         int choice = 0;
         do{
@@ -408,9 +492,9 @@ public class EmployeeTimekeepingApplication {
         PrintWriter pr = null;
         try{
             pr = new PrintWriter(new BufferedWriter(new FileWriter(new File(filepath), true)));
-            pr.println(employee.getId() + " " + employee.getPassword() + " " + employee.getFirstName() +
-                        " " + employee.getLastName() + " " + " " + employee.getHoursWorked() + " " +
-                            employee.getLocation() + " " + employee.getAddress()
+            pr.println(employee.getId() + "," + employee.getPassword() + "," + employee.getFirstName() +
+                        "," + employee.getLastName() + "," + "," + employee.getHoursWorked() + "," +
+                            employee.getLocation().getLocationId() + "," + employee.getAddress()
                             );
             
         }catch(IOException e){
@@ -421,6 +505,37 @@ public class EmployeeTimekeepingApplication {
         }
     }
         
-    
+     private static int searchTextFile(String userID, String password){// earches file for the specified login
+        File data = new File("database.txt");
+        int statusCode = -2;
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(data));
+          //  br.readLine();
+            String line;
+            while((line = br.readLine()) != null){
+                String[] dataSet = line.split(",");
+                if(dataSet[0].equals(userID) && dataSet[1].equals(password) && dataSet[dataSet.length-1].equals("enabled")){
+                    statusCode = 1; //status code 1 everything is good.
+                    return statusCode;
+                }
+                else if(dataSet[0].equals(userID) && dataSet[1].equals(password) && !dataSet[dataSet.length-1].equals("enabled")){
+                    statusCode = 0;
+                    return statusCode;
+                }
+                else if(dataSet[0].equals(userID) && !dataSet[1].equals(password)){
+                    statusCode = -1;
+                    return statusCode;
+                }
+                
+                
+            }
+            
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        
+        return statusCode;
+    }
+   
     
 }
