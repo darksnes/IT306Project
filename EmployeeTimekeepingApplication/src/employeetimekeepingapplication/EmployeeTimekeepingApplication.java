@@ -178,9 +178,9 @@ public class EmployeeTimekeepingApplication {
         else{
             try{
                 File file = new File("database.txt");
-                
                 if(file.createNewFile()){
                     JOptionPane.showMessageDialog(null, "Creating database");
+                    checkIfFileEmpty("database.txt");
                 }
             }catch(IOException e){
                 e.printStackTrace();
@@ -193,6 +193,24 @@ public class EmployeeTimekeepingApplication {
     
     private static void login(String filepath){
         
+    }
+    
+    private static void checkIfFileEmpty(String filepath){// if file is empty adds admin account
+        File file = new File(filepath);
+        
+        if(file.length() == 0){
+            PrintWriter pr = null;
+            try{
+            pr = new PrintWriter(new BufferedWriter(new FileWriter(new File(filepath), true)));
+            pr.println("admin" + " 123");
+            
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        finally{
+            pr.close();
+        }
+        }
     }
     
     private static void writeToFile(String filepath, Employee employee){ // adds object to the files. 
