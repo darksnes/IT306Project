@@ -39,37 +39,9 @@ public class EmployeeTimekeepingApplication {
       fileToList(list);
       
       addAdminToList(list);
+      JOptionPane.showMessageDialog(null, "Welcome!");
       loginMenu(list);
 
-      /*chooses which user type. final version of app will select this based on the type of object has logged in
- 
-      int choice = -1;
-       do{
-            try{
-                choice = Integer.parseInt(JOptionPane.showInputDialog("Which Account is logging in? \n" + 
-                        "1. Employee account \n" +
-                        "2. Manager account \n" +
-                        "3. Admin account\n "+
-                        "4. Exit\n"
-                        
-                ));
-            }catch(NumberFormatException e){
-                JOptionPane.showMessageDialog(null, "Invalid Option. Try again");
-            }
-            if(choice == 1){
-              employeeMenu(list);
-            }
-            if(choice == 2){
-              managerMenu(list);  
-            }            
-            if(choice == 3){
-              adminMenu(list);  
-            }
-
-            
-        }while(choice != 4) ;
-      
-          */
     }
 
     
@@ -77,7 +49,6 @@ public class EmployeeTimekeepingApplication {
         
        
         Employee test = null;
-        int i = 1;
         do{
             do{
 
@@ -96,7 +67,7 @@ public class EmployeeTimekeepingApplication {
 
             }
             else{
-                employeeMenu(list);
+                employeeMenu(list,test);
             }
         
         }while(JOptionPane.showConfirmDialog(null,"Log into another account?")== JOptionPane.YES_OPTION);
@@ -155,7 +126,7 @@ public class EmployeeTimekeepingApplication {
         }while(choice != 3) ;  
       
     }
-    private static void employeeMenu(SLinkedList list){
+    private static void employeeMenu(SLinkedList list, Employee test){
         int choice = 0;
         do{
             try{
@@ -174,7 +145,7 @@ public class EmployeeTimekeepingApplication {
             }
                             
                 if(choice == 1){
-                  
+                  JOptionPane.showMessageDialog(null,test);
                 }
                 if(choice == 2){
   
@@ -250,6 +221,8 @@ public class EmployeeTimekeepingApplication {
         employee.setID();
         JOptionPane.showMessageDialog(null,"****\nYour user ID is: " + employee.getId() + "\n****\n\nwrite this down!!");
         employee.setPassword(JOptionPane.showInputDialog("Enter password: "));
+        employee.setSalary(10000);
+        
         boolean valid = false;
         do{
             try{
@@ -259,8 +232,8 @@ public class EmployeeTimekeepingApplication {
             }
         }while(!valid);
         
-      //  addAddress(employee);
-     //   addLocation(employee);
+      addAddress(employee);
+      addLocation(employee);
         
         
         writeToFile("database.txt", employee);
@@ -329,7 +302,7 @@ public class EmployeeTimekeepingApplication {
         Admin defaultAdmin = new Admin();
         defaultAdmin.setID("admin");
         defaultAdmin.setPassword("123");
-        
+        defaultAdmin.setLastName("defaultAdminLastName");
         SNode admin = new SNode(defaultAdmin, null);
         list.add(admin);
         
@@ -468,31 +441,6 @@ public class EmployeeTimekeepingApplication {
             }    
         }
 
-    //write to file method
-    
-    /*
-    
-    private static void createDefaultAdmin(File filepath){
-        PrintWriter pr = null;
-        try{
-            pr = new PrintWriter(new BufferedWriter(filepath), true)));
-            pr.println(employee.getId() + " " + employee.getPassword() + " " + employee.getFirstName() +
-                        " " + employee.getLastName() + " " + " " + employee.getHoursWorked() + " " +
-                            employee.getLocation() + " " + employee.getAddress()
-                            );
-            
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-        finally{
-            pr.close();
-        }       
-        
-        
-        
-    }
-
-    */
     private static void writeToFile(String filepath, Employee employee){ // adds object to the files. 
         PrintWriter pr = null;
         try{

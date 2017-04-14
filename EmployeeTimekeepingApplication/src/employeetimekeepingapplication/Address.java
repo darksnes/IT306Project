@@ -56,6 +56,7 @@ public class Address {
     }
     
     public String toString(){
-        return "\nCity: " + this.city + "\nState: " + this.state;
+        return "";
+        
     }
 }
