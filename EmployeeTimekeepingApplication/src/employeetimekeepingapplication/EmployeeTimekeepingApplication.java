@@ -33,7 +33,7 @@ public class EmployeeTimekeepingApplication {
       /*chooses which user type. final version of app will select this based on the type of object has logged in
       */
       
-     /* removing for testing 
+
       
       
       int choice = -1;
@@ -43,11 +43,14 @@ public class EmployeeTimekeepingApplication {
                         "1. Employee account \n" +
                         "2. Manager account \n" +
                         "3. Admin account\n "+
-                        "4. Exit"
+                        "4. Exit\n"
                         
                 ));
             }catch(NumberFormatException e){
                 JOptionPane.showMessageDialog(null, "Invalid Option. Try again");
+            }
+            if(choice == 1){
+              employeeMenu(list);
             }
             if(choice == 2){
               managerMenu(list);  
@@ -59,49 +62,117 @@ public class EmployeeTimekeepingApplication {
             
         }while(choice != 4) ;
       
-      
-       */ 
-     
-     
-     adminMenu(list);
-    }
 
-    
-    //DO NOT USE
-    public static SNode sortUsers(SLinkedList list){
-        
-    
-          SNode min = list.getHead();
-          SNode node;
-          
-           for(node = list.getHead().getNext();node != null;node = node.getNext()){
-              if(node.getData().getLastName().compareToIgnoreCase(min.getData().getLastName()) < 0){
-                  min = node;
-               }
-           }
-           SNode temp = min;
-           return min;
     }
 
     public static SLinkedList sort(SLinkedList list){
         
-        
-        for(SNode index = list.getHead(); index != null; index = index.getNext()){
-            SNode min = index;
-            for(SNode index2 = index.getNext(); index2 != null; index2 = index2.getNext()){
-                if(index2.getData().getLastName().compareToIgnoreCase(min.getData().getLastName()) < 0){
-                    min = index2;
-                    
+
+
+
+            for(SNode index = list.getHead(); index != null; index = index.getNext()){
+                SNode min = index;
+                for(SNode index2 = index.getNext(); index2 != null; index2 = index2.getNext()){
+                    if(index2.getData().getLastName().compareToIgnoreCase(min.getData().getLastName()) < 0){
+                        min = index2;
+
+                    }
+                    SNode temp = index;
+                    index.setData(min.getData());
+                    min.setData(temp.getData());
+
                 }
-                SNode temp = index;
-                index.setData(min.getData());
-                min.setData(temp.getData());
-                
             }
-        }
+            JOptionPane.showMessageDialog(null,"list has been sorted");
+           
         return list;
     }     
     private static void managerMenu(SLinkedList list){
+        int choice = 0;
+        do{
+            try{
+                choice = Integer.parseInt(JOptionPane.showInputDialog("Manager Menu: \n" + 
+                        "1. Create Account\n" +
+                        "2. Reports\n"+
+                        "3. Logout\n"
+           
+                ));
+              
+            }catch(NumberFormatException e){
+                JOptionPane.showMessageDialog(null, "Invalid Option. Try again");
+            }
+                            
+                if(choice == 1){
+                    createUserMenu(list);
+                }
+                if(choice == 2){
+                    if(list.getHead()==null){
+                       JOptionPane.showMessageDialog(null, "There are no employees addded to the program");
+                    }
+                    else{
+                       reports(list); 
+                    }
+          
+          
+                }
+                if(choice == 5){
+                    printAll(list);
+                }
+        }while(choice != 3) ;  
+      
+    }
+    private static void employeeMenu(SLinkedList list){
+        int choice = 0;
+        do{
+            try{
+                choice = Integer.parseInt(JOptionPane.showInputDialog("Employee Menu: \n" + 
+                        "1. Display Profile\n" +
+                        "2. Update Information\n"+
+                        "3. Enter Time\n"+
+                        "4. Sign Timesheet\n"+
+                        "5. Logout\n"
+                      
+           
+                ));
+              
+            }catch(NumberFormatException e){
+                JOptionPane.showMessageDialog(null, "Invalid Option. Try again");
+            }
+                            
+                if(choice == 1){
+                  
+                }
+                if(choice == 2){
+  
+                }
+                if(choice == 3){
+               
+                }
+        }while(choice != 5) ;  
+      
+    }
+    private static void reports(SLinkedList list){
+        int choice = 0;
+        do{
+            try{
+                        choice = Integer.parseInt(JOptionPane.showInputDialog("How would you like to sort the reports?: \n" + 
+                        "1. Alphabetically \n" +
+                        "2. By Hours Worked\n"+
+                        "3. As is (do not sort) \n"+
+                        "4. Logout"
+                        
+                ));
+                
+                
+            }catch(NumberFormatException e){
+                JOptionPane.showMessageDialog(null,"Invalid Option. Try again");
+            }
+            if(choice ==1){
+                list = sort(list);
+                printAll(list);
+            }
+        }while(choice != 4);
+        
         
     }
     
@@ -263,55 +334,54 @@ public class EmployeeTimekeepingApplication {
                 choice = Integer.parseInt(JOptionPane.showInputDialog("Administrator Menu: \n" + 
                         "1. Create Account \n" +
                         "2. Manage User \n" +
-                        "3. View Disabled Users \n "+
-                        "4. Logout\n"+
-                        "5. Display All Users (for testing)\n"+
-                        "6. Sort All Users"
+                        "3. View Disabled Users\n "+
+                        "4. Logout\n"
+
                         
                 ));
-                
-                if(choice == 1){
-                    createUserMenu(list);
-                }
-                if(choice ==6){
-                    list = sort(list);
-                    //sortUsers(list);
-                }
-                if(choice == 5){
-                    printAll(list);
-                }
-
-               
-                
-       
+             
             }catch(NumberFormatException e){
                 JOptionPane.showMessageDialog(null, "Invalid Option. Try again");
             }
-        }while(choice != 4) ;
-        
+                            
+                if(choice == 1){
+                    createUserMenu(list);
+                }
+                if(choice == 2){
 
-        
+                }
+                if(choice == 3){
+
+                }
+        }while(choice != 4) ;  
       
     }
     //PRINTS ALL EMPLOYEE OBJECTS FOR TESTING PURPOSES***
     private static void printAll(SLinkedList list){
- 
-        String output = "";
-        SNode curr = list.getHead();
         
-        //if there is only one object in list
-        if(!curr.hasNext()){
-            output += curr.getData();
+        if(list.getHead() == null){
+          
         }
         else{
-        //if there are multiple objects in list
-            while(curr != null){
-               output += curr.getData() + "\n";
-               curr = curr.getNext();
+
+
+            String output = "";
+            SNode curr = list.getHead();
+
+            //if there is only one object in list
+           if(!curr.hasNext()){
+                output += curr.getData();
             }
+            else{
+                //if there are multiple objects in list
+                    while(curr != null){
+                       output += curr.getData() + "\n";
+                       curr = curr.getNext();
+                    }
+                }
+                JOptionPane.showMessageDialog(null, output);
+            }    
         }
-        JOptionPane.showMessageDialog(null, output);
-    }
 
     
     
