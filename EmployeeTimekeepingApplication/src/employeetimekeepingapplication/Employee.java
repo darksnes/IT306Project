@@ -65,6 +65,9 @@ public class Employee {
         this.firstName = firstName + " ";
     }
     public void setLastName(String lastName){
+        if(lastName.length()<3){
+            lastName = lastName +  "aa";
+        }
         this.lastName = lastName;
     }
     public void setPassword(String password){
