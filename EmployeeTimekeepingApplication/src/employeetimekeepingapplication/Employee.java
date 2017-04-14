@@ -50,6 +50,9 @@ public class Employee {
     public Location getLocation(){
         return location;
     }
+    public String getPassword(){
+        return password;
+    }
     public double getSalary(){
         return salary;
     }
@@ -67,16 +70,20 @@ public class Employee {
     public void setPassword(String password){
         this.password = password;
     }
+    public void setLocation(int locationKey){
+        this.location.setLocation(locationKey);
+    }
     
     public void setID(){
         Random rand = new Random();
         this.id = this.firstName.substring(0,3) + rand.nextInt(2000);
     }
+
     
     
     public String toString(){
         return "\nID: " + id + "\nName: " + firstName + "" + lastName +  
-                "\nHours Worked: " + hoursWorked + "\nSalary Earned: " + salary;
+                "\nHours Worked: " + hoursWorked + "\nSalary Earned: " + salary +"\n" + location;
                 
                 
     }
