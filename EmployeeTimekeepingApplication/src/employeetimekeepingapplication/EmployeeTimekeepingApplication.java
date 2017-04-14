@@ -31,18 +31,24 @@ public class EmployeeTimekeepingApplication {
       employee.setLastName("D");
       Employee employee2 = new Employee();
       employee2.setLastName("A");
+      Employee employee3 = new Employee();
+      employee3.setLastName("Mango");
       
       SNode node = new SNode(employee,null);
       SNode node2 = new SNode(employee2,null);
+      SNode node3 = new SNode(employee3,null);
       
       list.add(node);
       list.add(node2);
+      list.add(node3);
       
-       System.out.println(list.getHead().getData().getLastName());
+
       
-      SLinkedList list2 = sort(list);
+       SLinkedList list2 = sortUsers(list);
+       
+       
       
-      System.out.println(list2.getHead().getData().getLastName());
+      
       
       
         
@@ -301,31 +307,21 @@ public class EmployeeTimekeepingApplication {
     }
     
         
-    public static SNode sortUsers(SLinkedList list){
-         SNode min = list.getHead();
-         SNode node;
-         
-         for(node = list.getHead().getNext();node != null;node = node.getNext()){
-             if(node.getData().getLastName().compareToIgnoreCase(min.getData().getLastName()) < 0){
-                 min = node;
-             }
-         }
-         SNode temp = min;
-         
-         return min;
-    }
     
-    public static SLinkedList sort(SLinkedList list){
+    
+    public static SLinkedList sortUsers(SLinkedList list){
         SLinkedList list2 = new SLinkedList();
         SNode head = list.getHead();
         for(SNode index = head; index != null; index = index.getNext()){
             SNode min = index;
-            for(SNode index2 = min.getNext(); index2 != null; index2 = index2.getNext()){
-                if(index.getData().getLastName().compareToIgnoreCase(min.getData().getLastName()) < 0){
+            for(SNode index2 = index.getNext(); index2 != null; index2 = index2.getNext()){
+                if(index2.getData().getLastName().compareToIgnoreCase(min.getData().getLastName()) < 0){
                     min = index2;
-                    list2.add(min);
+                    
                 }
+                
             }
+            
             
         }
         return list2;
