@@ -195,11 +195,14 @@ public class EmployeeTimekeepingApplication {
         
     }
     
-    private static void writeToFile(String filepath, Employee employee){
+    private static void writeToFile(String filepath, Employee employee){ // adds object to the files. 
         PrintWriter pr = null;
         try{
             pr = new PrintWriter(new BufferedWriter(new FileWriter(new File(filepath), true)));
-            pr.println("Testing");
+            pr.println(employee.getId() + " " + employee.getPassword() + " " + employee.getFirstName() +
+                        " " + employee.getLastName() + " " + " " + employee.getHoursWorked() + " " +
+                            employee.getLocation() + " " + employee.getAddress()
+                            );
             
         }catch(IOException e){
             e.printStackTrace();
