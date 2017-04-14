@@ -32,7 +32,7 @@ public class EmployeeTimekeepingApplication {
       Employee employee2 = new Employee();
       employee2.setLastName("A");
       Employee employee3 = new Employee();
-      employee3.setLastName("Mango");
+      employee3.setLastName("X");
       
       SNode node = new SNode(employee,null);
       SNode node2 = new SNode(employee2,null);
@@ -313,12 +313,12 @@ public class EmployeeTimekeepingApplication {
     
     
     public static SLinkedList sort(SLinkedList list){
-        SLinkedList list2 = new SLinkedList();
+        
         
         for(SNode index = list.getHead(); index != null; index = index.getNext()){
             SNode min = index;
             for(SNode index2 = index.getNext(); index2 != null; index2 = index2.getNext()){
-                if(index2.getData().getLastName().compareToIgnoreCase(min.getData().getLastName()) < 0){
+                if(index2.getData().getLastName().compareToIgnoreCase(min.getData().getLastName()) > 0){
                     min = index2;
                     
                 }
