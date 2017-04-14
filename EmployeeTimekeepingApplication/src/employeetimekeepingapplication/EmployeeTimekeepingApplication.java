@@ -19,37 +19,28 @@ public class EmployeeTimekeepingApplication {
         SLinkedList list = new SLinkedList();
         
              //if file does not exist, create file
-        if(!checkFileExists()){
-            createFile();
-        }
-        
-        //store contents of file into linked list
-      fileToList(list);
+       
 
       /*chooses which user type. final version of app will select this based on the type of object has logged in
       */
-      int choice = -1;
-       do{
-            try{
-                choice = Integer.parseInt(JOptionPane.showInputDialog("Which Account is logging in? \n" + 
-                        "1. Employee account (still in progress) \n" +
-                        "2. Manager account (still in progress) \n" +
-                        "3. Admin account\n "+
-                        "4. Exit"
-                        
-                ));
-            }catch(NumberFormatException e){
-                JOptionPane.showMessageDialog(null, "Invalid Option. Try again");
-            }
-            if(choice == 2){
-              managerMenu(list);  
-            }            
-            if(choice == 3){
-              adminMenu(list);  
-            }
-
-            
-        }while(choice != 4);
+      Employee employee = new Employee();
+      employee.setLastName("D");
+      Employee employee2 = new Employee();
+      employee2.setLastName("A");
+      
+      SNode node = new SNode(employee,null);
+      SNode node2 = new SNode(employee2,null);
+      
+      list.add(node);
+      list.add(node2);
+      
+       System.out.println(list.getHead().getData().getLastName());
+      
+      SLinkedList list2 = sortUsers(list);
+      
+      System.out.println(list2.getHead().getData().getLastName());
+      
+      
         
       
     }
@@ -304,24 +295,28 @@ public class EmployeeTimekeepingApplication {
         }
         JOptionPane.showMessageDialog(null, output);
     }
-    private static void sortUsers(SLinkedList list){
-        
-
     
+        
     public static SLinkedList sortUsers(SLinkedList list){
          SLinkedList sortedList = new SLinkedList();
+         sortedList.add(list.getHead());
          
-         if(list.getSize() == 1){
-             sortedList.add(list.getHead());
-             return sortedList;
+         SNode current = sortedList.getHead();
+         SNode previous = current;
+         
+         if(sortedList.getSize() == 1){
+             if(list.getHead().getNext().getData().getLastName().compareToIgnoreCase(current.getData().getLastName()) > 0){
+                 current = list.getHead().getNext();
+                 current.setNext(previous);
+             }
+             else{
+                 current.setNext(list.getHead().getNext());
+             }
          }
-         SNode previous = list.getHead();
-         SNode current = list.getHead().getNext();
          
-         
-    }
        
-    
+        return sortedList;
+    }
 }
     
 
