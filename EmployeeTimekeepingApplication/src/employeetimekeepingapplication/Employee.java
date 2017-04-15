@@ -35,6 +35,19 @@ public class Employee {
         this.address = new Address();
         this.location = new Location();
     }
+    public Employee(String id, String password, String firstName, String lastName, double hoursWorked, int location, String address){
+        this.location = new Location();
+        this.address = new Address();
+        this.id = id;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.hoursWorked = hoursWorked;
+        this.location.setLocation(location);
+        
+        
+        
+    }
     public String getFirstName(){
         return firstName;
     }
@@ -62,9 +75,12 @@ public class Employee {
     
     //mutators
     public void setFirstName(String firstName){
-        this.firstName = firstName;
+        this.firstName = firstName + " ";
     }
     public void setLastName(String lastName){
+        if(lastName.length()<3){
+            lastName = lastName +  "aa";
+        }
         this.lastName = lastName;
     }
     public void setPassword(String password){
@@ -76,11 +92,10 @@ public class Employee {
     
     public void setID(){
         Random rand = new Random();
-        this.id = this.firstName.substring(0,3) + rand.nextInt(2000);
+        this.id = this.lastName.substring(0,2) + rand.nextInt(2000);
     }
-    
-    public void setID(String id){
-        this.id = id;
+    public void setID(String defaultID){
+        this.id = defaultID;
     }
     public boolean setHoursWorked(int hoursWorked){
         if(hoursWorked >= 0 && hoursWorked < 100000 ){
@@ -97,7 +112,7 @@ public class Employee {
     
     public String toString(){
         return "\nID: " + id + "\nName: " + firstName + "" + lastName +  
-                "\nHours Worked: " + hoursWorked + "\nSalary Earned: " + salary +"\n" + location;
+                "\nHours Worked: " + hoursWorked + "\nSalary Earned: " + salary +"\n" + "Location: " + location.getLocationId();
                 
                 
     }

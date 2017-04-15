@@ -63,6 +63,7 @@ public class EmployeeTimekeepingApplication {
         }while(choice != 4) ;
       
           */
+      
     }
 
     
@@ -70,27 +71,29 @@ public class EmployeeTimekeepingApplication {
         
        
         Employee test = null;
+        int i = 1;
         do{
-        
-            String userName = JOptionPane.showInputDialog("enter username");
-            String password = JOptionPane.showInputDialog("enter password");
+            do{
 
-            test = login(userName,password, list);
-        }while(test == null);
-        
+                String userName = JOptionPane.showInputDialog("enter username");
+                String password = JOptionPane.showInputDialog("enter password");
 
-        if(test instanceof Manager){
-            managerMenu(list);
-        }
-        else if(test instanceof Admin){
-           adminMenu(list);
-           
-        }
-        else{
-            employeeMenu(list);
-        }
+                test = login(userName,password, list);
+            }while(test == null);
+
+
+            if(test instanceof Manager){
+                managerMenu(list);
+            }
+            else if(test instanceof Admin){
+               adminMenu(list);
+
+            }
+            else{
+                employeeMenu(list);
+            }
         
-      
+        }while(JOptionPane.showConfirmDialog(null,"Log into another account?")== JOptionPane.YES_OPTION);
         
     }
     
@@ -205,16 +208,24 @@ public class EmployeeTimekeepingApplication {
     }
     
     private static void fileToList(SLinkedList list){
-       Scanner inputStream; 
-       
-       try{
-           inputStream = new Scanner(new FileInputStream("database.txt"));
-           inputStream.close();
-       }catch(FileNotFoundException e){
-           System.out.println(e);
-           System.exit(1);
-       }
-       
+       File data = new File("database.txt");
+       String[] str;
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(data));
+            br.readLine();
+            String line;
+            while((line = br.readLine()) != null){ 
+                if(line.trim().length() > 0){
+                    str = line.split(",");
+                    Employee employee = new Employee(str[0],str[1],str[2],str[3],Double.parseDouble("12"),Integer.parseInt("5"),str[6]);
+                    SNode node = new SNode(employee,null);
+                    list.add(node);
+                }
+            }
+            
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
     private static void addEmployee(SLinkedList list, int choice){
         Employee employee = null;
@@ -239,6 +250,7 @@ public class EmployeeTimekeepingApplication {
         employee.setFirstName(JOptionPane.showInputDialog("Enter first name:"));
         employee.setLastName(JOptionPane.showInputDialog("Enter last name: "));
         employee.setID();
+        JOptionPane.showMessageDialog(null,"****\nYour user ID is: " + employee.getId() + "\n****\n\nwrite this down!!");
         employee.setPassword(JOptionPane.showInputDialog("Enter password: "));
         boolean valid = false;
         do{
@@ -249,9 +261,11 @@ public class EmployeeTimekeepingApplication {
             }
         }while(!valid);
         
-        addAddress(employee);
-        addLocation(employee);
+      //  addAddress(employee);
+     //   addLocation(employee);
         
+        
+        writeToFile("database.txt", employee);
       
     }
     private static void addAddress(Employee employee){
@@ -314,8 +328,9 @@ public class EmployeeTimekeepingApplication {
     
     //adds the default admin in the text file to the linked list
     private static void addAdminToList(SLinkedList list){
-        Employee defaultAdmin = new Admin();
+        Admin defaultAdmin = new Admin();
         defaultAdmin.setID("admin");
+        defaultAdmin.setLastName("jimmy");
         defaultAdmin.setPassword("123");
         
         SNode admin = new SNode(defaultAdmin, null);
@@ -486,7 +501,7 @@ public class EmployeeTimekeepingApplication {
             pr = new PrintWriter(new BufferedWriter(new FileWriter(new File(filepath), true)));
             pr.println(employee.getId() + "," + employee.getPassword() + "," + employee.getFirstName() +
                         "," + employee.getLastName() + "," + "," + employee.getHoursWorked() + "," +
-                            employee.getLocation().getLocationId() + "," + employee.getAddress()
+                            employee.getLocation().getLocationId() + "," + employee.getAddress() + ","+ "enabled"
                             );
             
         }catch(IOException e){
@@ -506,7 +521,8 @@ public class EmployeeTimekeepingApplication {
             String line;
             while((line = br.readLine()) != null){
                 String[] dataSet = line.split(",");
-                if(dataSet[0].equals(userID) && dataSet[1].equals(password) && dataSet[dataSet.length-1].equals("enabled")){
+ 
+                if(dataSet[0].equals(userID) && dataSet[1].equals(password) &&  dataSet[dataSet.length-1].equals("enabled")){
                     statusCode = 1; //status code 1 everything is good.
                     return statusCode;
                 }
