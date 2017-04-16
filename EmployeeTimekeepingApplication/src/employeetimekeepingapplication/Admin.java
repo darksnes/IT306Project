@@ -11,12 +11,28 @@ package employeetimekeepingapplication;
  */
 public class Admin extends Employee {
     
+    private String typeKey;
+    
     public Admin(){
+        
+    }
+    public Admin(String id, String password, String firstName, String lastName, double hoursWorked, int location, String address,String typeKey){
+        super(id,  password,  firstName,  lastName,  hoursWorked,  location,  address, typeKey);
         
     }
     public Admin(String locationId){
         //super(locationId);
     }
+    
+    //overridden setTypeKey method
+    public void setTypeKey(){
+        this.typeKey = "3";
+    }
+    
+    public String getTypeKey(){
+        return typeKey;
+    }
+    
     private String adminLoginId;
 
 }
