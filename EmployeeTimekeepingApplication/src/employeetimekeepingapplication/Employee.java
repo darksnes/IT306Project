@@ -17,6 +17,7 @@ public class Employee {
     private String lastName;
     private String id;
     private String password;
+    private int loginAttempts = 0;
     
     /* typeKey is a key that will be stored in the DB so when the DB is 
     written to file, the type of employee is known
@@ -82,6 +83,9 @@ public class Employee {
     public String getTypeKey(){
         return typeKey;
     }
+    public int getLoginAttempts(){
+        return loginAttempts;
+    }
     
     //mutators
     public void setFirstName(String firstName){
@@ -128,6 +132,12 @@ public class Employee {
     
     public void setTypeKey(String typeKey){
         
+    }
+    
+    public void setLoginAttempts(){
+        if(this.getLoginAttempts() < 3){
+            this.loginAttempts++;
+        }
     }
 
 

@@ -44,6 +44,7 @@ public class EmployeeTimekeepingApplication {
        //current employee
         Employee test = null;
         boolean exit = false;
+        int count = 0;
         
         do{
             do{
@@ -58,7 +59,6 @@ public class EmployeeTimekeepingApplication {
                 String password = JOptionPane.showInputDialog("enter password");
 
                 test = login(userName,password, list);
-
             }while(test == null || exit);
 
 
@@ -361,6 +361,7 @@ public class EmployeeTimekeepingApplication {
     private static Employee login(String userID, String password, SLinkedList list){// login method 
         int code = searchTextFile(userID, password);
         Employee employee = null;
+        int count = 0;
         
         if(code == 1){
             employee = list.getSpecific(userID);
@@ -371,6 +372,12 @@ public class EmployeeTimekeepingApplication {
         }
         else if(code == -1){
             JOptionPane.showMessageDialog(null, "Incorrect password");
+            employee = list.getSpecific(userID);
+            employee.setLoginAttempts();
+            
+            if(employee.getLoginAttempts() == 3){
+                disableUser(userID);
+            }
         }
         else{
             JOptionPane.showMessageDialog(null, "Account does not exist.");
@@ -568,13 +575,12 @@ public class EmployeeTimekeepingApplication {
         test.setLastName(JOptionPane.showInputDialog("Enter new last name: "));
         
         try {
-        // input the file content to the StringBuffer "input"
+        
         BufferedReader file = new BufferedReader(new FileReader("database.txt"));
         String line;
         StringBuffer inputBuffer = new StringBuffer();
 
         while ((line = file.readLine()) != null) {
-            String[] dataSet = line.split(",");
                 inputBuffer.append(line);
                 inputBuffer.append('\n');         
         }
@@ -600,6 +606,39 @@ public class EmployeeTimekeepingApplication {
         e.printStackTrace();
     }
         
+    }
+    
+    public static void disableUser(String userID){
+        try {
+        
+        BufferedReader file = new BufferedReader(new FileReader("database.txt"));
+        String line;
+        StringBuffer inputBuffer = new StringBuffer();
+        
+
+        while ((line = file.readLine()) != null) {
+            String[] data = line.split(",");
+            if(data[0].equals(userID)){
+                line = line.replace("enabled", "disabled");
+            }
+            inputBuffer.append(line);
+            inputBuffer.append('\n');
+        }
+        String inputStr = inputBuffer.toString();
+
+        file.close();
+
+        // check if the new input is right
+        System.out.println("----------------------------------\n"  + inputStr);
+
+        // write the new String with the replaced line OVER the same file
+        FileOutputStream fileOut = new FileOutputStream("database.txt");
+        fileOut.write(inputStr.getBytes());
+        fileOut.close();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
     }
    
     
