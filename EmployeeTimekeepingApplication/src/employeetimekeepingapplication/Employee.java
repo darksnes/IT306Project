@@ -17,6 +17,12 @@ public class Employee {
     private String lastName;
     private String id;
     private String password;
+    
+    /* typeKey is a key that will be stored in the DB so when the DB is 
+    written to file, the type of employee is known
+    */
+    private String typeKey;
+    
     private double salary;
     private double hoursWorked;
     private boolean disabled;
@@ -35,7 +41,7 @@ public class Employee {
         this.address = new Address();
         this.location = new Location();
     }
-    public Employee(String id, String password, String firstName, String lastName, double hoursWorked, int location, String address){
+        public Employee(String id, String password, String firstName, String lastName, double hoursWorked, int location, String address,String typeKey){
         this.location = new Location();
         this.address = new Address();
         this.id = id;
@@ -44,6 +50,7 @@ public class Employee {
         this.lastName = lastName;
         this.hoursWorked = hoursWorked;
         this.location.setLocation(location);
+        this.typeKey = typeKey;
         
         
         
@@ -71,6 +78,9 @@ public class Employee {
     }
     public double getHoursWorked(){
         return hoursWorked;
+    }
+    public String getTypeKey(){
+        return typeKey;
     }
     
     //mutators
@@ -107,6 +117,19 @@ public class Employee {
         }
     
     }
+    public void setSalary(double salary){
+        this.salary = salary;
+    }
+    //method that will be overrideen
+     public void setTypeKey(){
+        this.typeKey = "1";
+    }
+    
+    
+    public void setTypeKey(String typeKey){
+        
+    }
+
 
     
     

@@ -33,53 +33,33 @@ public class EmployeeTimekeepingApplication {
       fileToList(list);
       
       addAdminToList(list);
+      JOptionPane.showMessageDialog(null, "Welcome!");
       loginMenu(list);
 
-      /*chooses which user type. final version of app will select this based on the type of object has logged in
- 
-      int choice = -1;
-       do{
-            try{
-                choice = Integer.parseInt(JOptionPane.showInputDialog("Which Account is logging in? \n" + 
-                        "1. Employee account \n" +
-                        "2. Manager account \n" +
-                        "3. Admin account\n "+
-                        "4. Exit\n"
-                        
-                ));
-            }catch(NumberFormatException e){
-                JOptionPane.showMessageDialog(null, "Invalid Option. Try again");
-            }
-            if(choice == 1){
-              employeeMenu(list);
-            }
-            if(choice == 2){
-              managerMenu(list);  
-            }            
-            if(choice == 3){
-              adminMenu(list);  
-            }
-            
-        }while(choice != 4) ;
-      
-          */
-      
     }
 
     
     public static void loginMenu(SLinkedList list){
         
-       
+       //current employee
         Employee test = null;
-        int i = 1;
+        boolean exit = false;
+        
         do{
             do{
 
                 String userName = JOptionPane.showInputDialog("enter username");
+                     
+                    if(userName == null){
+                        JOptionPane.showMessageDialog(null,"Goodbye");
+                        System.exit(1);
+                    }
+                
                 String password = JOptionPane.showInputDialog("enter password");
 
                 test = login(userName,password, list);
-            }while(test == null);
+
+            }while(test == null || exit);
 
 
             if(test instanceof Manager){
@@ -90,7 +70,8 @@ public class EmployeeTimekeepingApplication {
 
             }
             else{
-                employeeMenu(list);
+
+                employeeMenu(list,test);
             }
         
         }while(JOptionPane.showConfirmDialog(null,"Log into another account?")== JOptionPane.YES_OPTION);
@@ -149,7 +130,7 @@ public class EmployeeTimekeepingApplication {
         }while(choice != 3) ;  
       
     }
-    private static void employeeMenu(SLinkedList list){
+    private static void employeeMenu(SLinkedList list, Employee test){
         int choice = 0;
         do{
             try{
@@ -168,10 +149,11 @@ public class EmployeeTimekeepingApplication {
             }
                             
                 if(choice == 1){
-                  
+                  JOptionPane.showMessageDialog(null,test);
                 }
                 if(choice == 2){
-  
+                    updateInformation(test);
+
                 }
                 if(choice == 3){
                
@@ -184,7 +166,7 @@ public class EmployeeTimekeepingApplication {
         do{
             try{
                         choice = Integer.parseInt(JOptionPane.showInputDialog("How would you like to sort the reports?: \n" + 
-                        "1. Alphabetically \n" +
+                        "1. Alphabetically (by last name) \n" +
                         "2. By Hours Worked\n"+
                         "3. As is (do not sort) \n"+
                         "4. Logout"
@@ -199,6 +181,10 @@ public class EmployeeTimekeepingApplication {
                 list = sort(list);
                 printAll(list);
             }
+            if(choice ==2){
+                list = sortByHours(list);
+                printAll(list);
+            }
             if(choice ==3){
                 printAll(list);
             }
@@ -210,16 +196,34 @@ public class EmployeeTimekeepingApplication {
     private static void fileToList(SLinkedList list){
        File data = new File("database.txt");
        String[] str;
-        try{
+        try{ 
             BufferedReader br = new BufferedReader(new FileReader(data));
             br.readLine();
             String line;
             while((line = br.readLine()) != null){ 
                 if(line.trim().length() > 0){
                     str = line.split(",");
-                    Employee employee = new Employee(str[0],str[1],str[2],str[3],Double.parseDouble("12"),Integer.parseInt("5"),str[6]);
-                    SNode node = new SNode(employee,null);
-                    list.add(node);
+                    
+                    //if type is admin
+                    if(str[9].equals("3")){
+                        Admin employee = new Admin(str[0],str[1],str[2],str[3],Double.parseDouble("12"),Integer.parseInt("5"),str[6],str[7]);
+                        SNode node = new SNode(employee,null);
+                       
+                        list.add(node);
+                    }
+                    //if type is manager
+                    if(str[9].equals("2")){
+                        Manager employee = new Manager(str[0],str[1],str[2],str[3],Double.parseDouble("12"),Integer.parseInt("5"),str[6],str[7]); 
+                         SNode node = new SNode(employee,null);
+                         list.add(node);                       
+                    }
+                    //if type is employee
+                    else{
+                        Employee employee  = new Employee(str[0],str[1],str[2],str[3],Double.parseDouble("12"),Integer.parseInt("5"),str[6],str[7]);
+                         SNode node = new SNode(employee,null);
+                         list.add(node);    
+                    }
+
                 }
             }
             
@@ -238,20 +242,38 @@ public class EmployeeTimekeepingApplication {
                 break;
             case 3:
                 employee = new Admin();
+                System.out.println("admin instanciated");
                 break;            
         }
-        createEmployee(employee);
+        
+        createEmployee(employee);        
         SNode node = new SNode(employee,null);
         list.add(node);
     }
     
     private static void createEmployee(Employee employee){
+        
+        //set the typeKey
+        
+        
+        if(employee instanceof Admin){
+            employee.setTypeKey();
+        }
+        if(employee instanceof Manager){
+            employee.setTypeKey();
+        }
+        else{
+            employee.setTypeKey();
+        }
 
+        
         employee.setFirstName(JOptionPane.showInputDialog("Enter first name:"));
         employee.setLastName(JOptionPane.showInputDialog("Enter last name: "));
         employee.setID();
         JOptionPane.showMessageDialog(null,"****\nYour user ID is: " + employee.getId() + "\n****\n\nwrite this down!!");
         employee.setPassword(JOptionPane.showInputDialog("Enter password: "));
+        employee.setSalary(10000);
+        
         boolean valid = false;
         do{
             try{
@@ -261,8 +283,8 @@ public class EmployeeTimekeepingApplication {
             }
         }while(!valid);
         
-      //  addAddress(employee);
-     //   addLocation(employee);
+      addAddress(employee);
+      addLocation(employee);
         
         
         writeToFile("database.txt", employee);
@@ -285,7 +307,7 @@ public class EmployeeTimekeepingApplication {
         int locationID;
         do{
             try{
-                locationID = Integer.parseInt(JOptionPane.showInputDialog("1. Factory 415, 123 Fake Street, Nowhere, NN, 00111 \n" +  
+                locationID = Integer.parseInt(JOptionPane.showInputDialog("Please Enter Work Location\n\n1. Factory 415, 123 Fake Street, Nowhere, NN, 00111 \n" +  
                 "2. Research 221, 123 Faker Street, Still Nowhere, NN, 00112 \n" + 
                 "3. Corporate 001, 123 Not-Fake Street, Somewhere, IL, 01010"));
             }
@@ -328,11 +350,7 @@ public class EmployeeTimekeepingApplication {
     
     //adds the default admin in the text file to the linked list
     private static void addAdminToList(SLinkedList list){
-        Admin defaultAdmin = new Admin();
-        defaultAdmin.setID("admin");
-        defaultAdmin.setLastName("jimmy");
-        defaultAdmin.setPassword("123");
-        
+        Admin defaultAdmin = new Admin("admin","123","defaultFN","defaultLN",1,1,"default","3");        
         SNode admin = new SNode(defaultAdmin, null);
         list.add(admin);
         
@@ -369,7 +387,7 @@ public class EmployeeTimekeepingApplication {
             PrintWriter pr = null;
             try{
             pr = new PrintWriter(new BufferedWriter(new FileWriter(new File(filepath), true)));
-            pr.println("admin" + ","+ "123" + "," + "enabled");
+            pr.println("admin" + ","+ "123" + "," + "enabled" + "," + 3);
             
             
         }catch(IOException e){
@@ -471,37 +489,13 @@ public class EmployeeTimekeepingApplication {
             }    
         }
 
-    //write to file method
-    
-    /*
-    
-    private static void createDefaultAdmin(File filepath){
-        PrintWriter pr = null;
-        try{
-            pr = new PrintWriter(new BufferedWriter(filepath), true)));
-            pr.println(employee.getId() + " " + employee.getPassword() + " " + employee.getFirstName() +
-                        " " + employee.getLastName() + " " + " " + employee.getHoursWorked() + " " +
-                            employee.getLocation() + " " + employee.getAddress()
-                            );
-            
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-        finally{
-            pr.close();
-        }       
-        
-        
-        
-    }
-    */
     private static void writeToFile(String filepath, Employee employee){ // adds object to the files. 
         PrintWriter pr = null;
         try{
             pr = new PrintWriter(new BufferedWriter(new FileWriter(new File(filepath), true)));
             pr.println(employee.getId() + "," + employee.getPassword() + "," + employee.getFirstName() +
                         "," + employee.getLastName() + "," + "," + employee.getHoursWorked() + "," +
-                            employee.getLocation().getLocationId() + "," + employee.getAddress() + ","+ "enabled"
+                            employee.getLocation().getLocationId() + "," + employee.getAddress() + ","+ "enabled" + "," + employee.getTypeKey()
                             );
             
         }catch(IOException e){
@@ -522,11 +516,11 @@ public class EmployeeTimekeepingApplication {
             while((line = br.readLine()) != null){
                 String[] dataSet = line.split(",");
  
-                if(dataSet[0].equals(userID) && dataSet[1].equals(password) &&  dataSet[dataSet.length-1].equals("enabled")){
+                if(dataSet[0].equals(userID) && dataSet[1].equals(password) &&  dataSet[dataSet.length-2].equals("enabled")){
                     statusCode = 1; //status code 1 everything is good.
                     return statusCode;
                 }
-                else if(dataSet[0].equals(userID) && dataSet[1].equals(password) && !dataSet[dataSet.length-1].equals("enabled")){
+                else if(dataSet[0].equals(userID) && dataSet[1].equals(password) && !dataSet[dataSet.length-2].equals("enabled")){
                     statusCode = 0;
                     return statusCode;
                 }
@@ -538,11 +532,74 @@ public class EmployeeTimekeepingApplication {
                 
             }
             
+            
         }catch(Exception e){
             e.printStackTrace();
         }
         
         return statusCode;
+    }
+     
+     public static SLinkedList sortByHours(SLinkedList list){ 
+        SNode min;
+        Employee temp;
+        for(SNode index = list.getHead(); index != null; index = index.getNext()){
+            min = index;
+            for(SNode index2 = index.getNext(); index2 != null; index2 = index2.getNext()){
+                if(index2.getData().getHoursWorked() < min.getData().getHoursWorked()){
+                    min = index2;
+                }
+            }
+            if(index != min){
+                temp = index.getData();
+                index.setData(min.getData());
+                min.setData(temp);
+            }
+        }
+        return list;
+    }
+     
+    public static void updateInformation(Employee test){
+        
+        String ogName = test.getFirstName();
+        String ogLastName = test.getLastName();
+        
+        test.setFirstName(JOptionPane.showInputDialog("Enter new first name: "));
+        test.setLastName(JOptionPane.showInputDialog("Enter new last name: "));
+        
+        try {
+        // input the file content to the StringBuffer "input"
+        BufferedReader file = new BufferedReader(new FileReader("database.txt"));
+        String line;
+        StringBuffer inputBuffer = new StringBuffer();
+
+        while ((line = file.readLine()) != null) {
+            String[] dataSet = line.split(",");
+                inputBuffer.append(line);
+                inputBuffer.append('\n');         
+        }
+        String inputStr = inputBuffer.toString();
+        
+        file.close();
+        
+        System.out.println(inputStr); // check that it's inputted right
+
+        
+        inputStr = inputStr.replace(ogName, test.getFirstName());
+        inputStr = inputStr.replace(ogLastName, test.getLastName());
+
+        // check if the new input is right
+        System.out.println("----------------------------------\n"  + inputStr);
+
+        // write the new String with the replaced line OVER the same file
+        FileOutputStream fileOut = new FileOutputStream("database.txt");
+        fileOut.write(inputStr.getBytes());
+        fileOut.close();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+        
     }
    
     
