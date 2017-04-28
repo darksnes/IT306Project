@@ -27,7 +27,7 @@ public class Employee {
     private double salary;
     private double hoursWorked;
     private boolean disabled;
-    private int status;
+    private String status;
     
     
     
@@ -43,7 +43,7 @@ public class Employee {
         this.address = new Address();
         this.location = new Location();
     }
-        public Employee(String id, String password, String firstName, String lastName, double hoursWorked, int location, String address,String typeKey){
+        public Employee(String id, String password, String firstName, String lastName, double hoursWorked, int location, String address,String status,String typeKey){
         this.location = new Location();
         this.address = new Address();
         this.id = id;
@@ -53,6 +53,7 @@ public class Employee {
         this.hoursWorked = hoursWorked;
         this.location.setLocation(location);
         this.typeKey = typeKey;
+        this.status = status;
         
         
         
@@ -87,8 +88,8 @@ public class Employee {
     public int getLoginAttempts(){
         return loginAttempts;
     }
-    public int getStatus(){
-        return this.getStatus();
+    public String getStatus(){
+        return this.status;
     }
     
     //mutators

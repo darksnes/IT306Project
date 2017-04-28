@@ -16,8 +16,8 @@ public class Admin extends Employee {
     public Admin(){
         
     }
-    public Admin(String id, String password, String firstName, String lastName, double hoursWorked, int location, String address,String typeKey){
-        super(id,  password,  firstName,  lastName,  hoursWorked,  location,  address, typeKey);
+    public Admin(String id, String password, String firstName, String lastName, double hoursWorked, int location, String address,String status,String typeKey){
+        super(id,  password,  firstName,  lastName,  hoursWorked,  location,  address, status, typeKey);
         
     }
     public Admin(String locationId){

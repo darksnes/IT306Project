@@ -63,7 +63,7 @@ public class EmployeeTimekeepingApplication {
 
 
             if(test instanceof Manager){
-                managerMenu(list);
+                managerMenu(list, test);
             }
             else if(test instanceof Admin){
                adminMenu(list);
@@ -96,14 +96,15 @@ public class EmployeeTimekeepingApplication {
         }
         return list;
     }       
-    private static void managerMenu(SLinkedList list){
+    private static void managerMenu(SLinkedList list, Employee manager){
         int choice = 0;
         do{
             try{
                 choice = Integer.parseInt(JOptionPane.showInputDialog("Manager Menu: \n" + 
                         "1. Create Account\n" +
                         "2. Reports\n"+
-                        "3. Logout\n"
+                        "3. Logout\n"+
+                        "4. View employees in location"
            
                 ));
               
@@ -121,7 +122,9 @@ public class EmployeeTimekeepingApplication {
                     else{
                        reports(list); 
                     }
-          
+                if(choice == 4){
+                    viewSameLocation(list,manager);
+                }
           
                 }
                 if(choice == 5){
@@ -208,21 +211,21 @@ public class EmployeeTimekeepingApplication {
                     str = line.split(",");
                     
                     //if type is admin
-                    if(str[8].equals("3")){
-                        Admin employee = new Admin(str[0],str[1],str[2],str[3],Double.parseDouble(str[4]),Integer.parseInt(str[5]),str[6],str[8]);
+                    if(str[9].equals("3")){
+                        Admin employee = new Admin(str[0],str[1],str[2],str[3],Double.parseDouble(str[4]),Integer.parseInt(str[5]),str[6],str[8],str[9]);
                         SNode node = new SNode(employee,null);
                        
                         list.add(node);
                     }
                     //if type is manager
-                    if(str[8].equals("2")){
-                        Manager employee = new Manager(str[0],str[1],str[2],str[3],Double.parseDouble(str[4]),Integer.parseInt(str[5]),str[6],str[8]); 
+                    if(str[9].equals("2")){
+                        Manager employee = new Manager(str[0],str[1],str[2],str[3],Double.parseDouble(str[4]),Integer.parseInt(str[5]),str[6],str[8],str[9]); 
                          SNode node = new SNode(employee,null);
                          list.add(node);                       
                     }
                     //if type is employee
                     else{
-                        Employee employee  = new Employee(str[0],str[1],str[2],str[3],Double.parseDouble(str[4]),Integer.parseInt(str[5]),str[6],str[8]);
+                        Employee employee  = new Employee(str[0],str[1],str[2],str[3],Double.parseDouble(str[4]),Integer.parseInt(str[5]),str[6],str[8],str[9]);
                          SNode node = new SNode(employee,null);
                          list.add(node);    
                     }
@@ -353,7 +356,7 @@ public class EmployeeTimekeepingApplication {
     
     //adds the default admin in the text file to the linked list
     private static void addAdminToList(SLinkedList list){
-        Admin defaultAdmin = new Admin("admin","123","defaultFN","defaultLN",1,1,"default","3");        
+        Admin defaultAdmin = new Admin("admin","123","defaultFN","defaultLN",1,1,"default","enabled","3");        
         SNode admin = new SNode(defaultAdmin, null);
         list.add(admin);
         
@@ -464,10 +467,10 @@ public class EmployeeTimekeepingApplication {
                     createUserMenu(list);
                 }
                 if(choice == 2){
-
+                    
                 }
                 if(choice == 3){
-
+                    viewDisabled(list);
                 }
         }while(choice != 4) ;  
       
@@ -693,6 +696,36 @@ public class EmployeeTimekeepingApplication {
     }
         JOptionPane.showMessageDialog(null, "Hour changes have been saved.");
     }
+    
+    public static void viewDisabled(SLinkedList list){
+        SNode node = list.getHead();
+        String disabledUsers = "";
+        
+        while(node != null){
+            if(node.getData().getStatus().equals("disabled")){
+                disabledUsers += node.getData().getId() + "\n";
+            }
+            node = node.getNext();
+        }
+        
+        JOptionPane.showMessageDialog(null, disabledUsers);
+        
+        
+    }
+    
+    public static void viewSameLocation(SLinkedList list, Employee manager){
+        SNode node = list.getHead();
+        
+        while(node != null){
+            if(node.getData() instanceof Employee && 
+                    node.getData().getLocation().getLocationId() == manager.getLocation().getLocationId()){
+                System.out.println(node.getData().getId());
+            }
+            node = node.getNext();
+        }
+    }
+    
+    
    
     
 }

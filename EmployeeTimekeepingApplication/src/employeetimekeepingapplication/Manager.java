@@ -21,8 +21,8 @@ public class Manager extends Employee {
        //super(locationId);
    }
 
-    public Manager(String id, String password, String firstName, String lastName, double hoursWorked, int location, String address,String typeKey){
-        super(id,  password,  firstName,  lastName,  hoursWorked,  location,  address, typeKey);
+    public Manager(String id, String password, String firstName, String lastName, double hoursWorked, int location, String address,String status,String typeKey){
+        super(id,  password,  firstName,  lastName,  hoursWorked,  location,  address,status,typeKey);
         
     }
 
