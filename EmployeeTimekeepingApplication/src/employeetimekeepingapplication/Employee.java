@@ -117,7 +117,7 @@ public class Employee {
         this.id = defaultID;
     }
     public boolean setHoursWorked(double hoursWorked){
-        if(hoursWorked >= 0 && hoursWorked < 100000 ){
+        if(hoursWorked >= 0 && hoursWorked <= 200 ){
                 this.hoursWorked = hoursWorked;
                 return true;
         }

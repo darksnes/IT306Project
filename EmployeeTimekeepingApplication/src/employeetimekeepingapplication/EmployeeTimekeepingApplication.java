@@ -13,9 +13,12 @@ Password: 123
  */
 package employeetimekeepingapplication;
 
+import java.awt.Dimension;
 import java.io.*;
 import java.util.*;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 public class EmployeeTimekeepingApplication {
 
@@ -467,7 +470,7 @@ public class EmployeeTimekeepingApplication {
                     createUserMenu(list);
                 }
                 if(choice == 2){
-                    
+                    manageUser(list, "jimmy");
                 }
                 if(choice == 3){
                     viewDisabled(list);
@@ -614,7 +617,7 @@ public class EmployeeTimekeepingApplication {
         
     }
     
-    public static void disableUser(String userID){
+    public static void disableUser(String userID){ //use for 
         try {
         
         BufferedReader file = new BufferedReader(new FileReader("database.txt"));
@@ -645,6 +648,9 @@ public class EmployeeTimekeepingApplication {
     } catch (Exception e) {
         e.printStackTrace();
     }
+        finally{
+            JOptionPane.showMessageDialog(null, "Account is now Disabled");
+        }
     }
     
     public static void setHoursWorked(Employee employee){
@@ -698,19 +704,27 @@ public class EmployeeTimekeepingApplication {
     }
     
     public static void viewDisabled(SLinkedList list){
-        SNode node = list.getHead();
-        String disabledUsers = "";
-        
-        while(node != null){
-            if(node.getData().getStatus().equals("disabled")){
-                disabledUsers += node.getData().getId() + "\n";
+        String disabled = "**DISABLED USERS**\n";
+        try{ 
+            BufferedReader br = new BufferedReader(new FileReader("database.txt"));
+            br.readLine();
+            String line;
+            while((line = br.readLine()) != null){ 
+                if(!line.equals("")){
+                    String[] dataSet = line.split(",");
+                    if(dataSet[8].equals("disabled")){
+                        disabled += dataSet[0] + "\n";
+                    }
+                }
             }
-            node = node.getNext();
+            
+        }catch(Exception e){
+            e.printStackTrace();
         }
-        
-        JOptionPane.showMessageDialog(null, disabledUsers);
-        
-        
+        finally{
+            JOptionPane.showMessageDialog(null, disabled);
+        }
+            
     }
     
     public static void viewSameLocation(SLinkedList list, Employee manager){
@@ -725,7 +739,141 @@ public class EmployeeTimekeepingApplication {
         }
     }
     
+    public static void enableUser(String userID){
+        try {
+        
+        BufferedReader file = new BufferedReader(new FileReader("database.txt"));
+        String line;
+        StringBuffer inputBuffer = new StringBuffer();
+        
+
+        while ((line = file.readLine()) != null) {
+            String[] data = line.split(",");
+            if(data[0].equals(userID)){
+                line = line.replace("disabled", "enabled");
+            }
+            inputBuffer.append(line);
+            inputBuffer.append('\n');
+        }
+        String inputStr = inputBuffer.toString();
+
+        file.close();
+
+        // check if the new input is right
+        System.out.println("----------------------------------\n"  + inputStr);
+
+        // write the new String with the replaced line OVER the same file
+        FileOutputStream fileOut = new FileOutputStream("database.txt");
+        fileOut.write(inputStr.getBytes());
+        fileOut.close();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+      finally{
+            JOptionPane.showMessageDialog(null, "Account is now Enabled");
+        }
+    }
     
-   
+    public static void manageUser(SLinkedList list, String userID){
+        SNode node = list.getHead();
+        String data = "";
+        
+        while(node != null){
+            data += node.getData().getId() + "\n";
+            node = node.getNext();
+        }
+        
+        data += "\n****Admin****";
+        String Id = JOptionPane.showInputDialog(data,"Enter ID to view profile");
+        getProfile(Id, list);
+        
+    }
     
+    /**
+     * Gets the user profile and gives the admin options, that include enable or
+     * disable account and reset user password. 
+     */
+    
+    public static void getProfile(String userID, SLinkedList list){
+        SNode node = list.getHead();
+        String profile = "";
+        
+        while(node != null){
+            if(node.getData().getId().equals(userID)){
+                profile = node.getData().toString();
+            }
+            node = node.getNext();
+        }
+        
+        String[] choices = {"Enable Account","Disable Account","Reset Password"};
+        profile += "\n";
+        profile += "\n**** Admin Options ****";
+        
+        String choice = (String) JOptionPane.showInputDialog(null, profile,
+        "The Choice of a Lifetime", JOptionPane.QUESTION_MESSAGE, null, 
+        choices, 
+        choices[0]);
+        
+        if(choice.equalsIgnoreCase(choices[0])){
+            enableUser(userID);
+        }
+        else if(choice.equalsIgnoreCase(choices[1])){
+            disableUser(userID);
+        }
+        else if(choice.equals(choices[2])){
+            resetPassword(userID);
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Invalid");
+        }
+        
+     
+    }
+    
+    /**
+     Searches text file for User ID, if match is found resets password. 
+     */
+    
+    public static void resetPassword(String userID){
+        try {
+        
+        BufferedReader file = new BufferedReader(new FileReader("database.txt"));
+        String line;
+        StringBuffer inputBuffer = new StringBuffer();
+        
+
+        while ((line = file.readLine()) != null) {
+            String[] data = line.split(",");
+            if(data[0].equals(userID)){
+                line = line.replace(data[1], "password");
+            }
+            inputBuffer.append(line);
+            inputBuffer.append('\n');
+        }
+        String inputStr = inputBuffer.toString();
+
+        file.close();
+
+        // check if the new input is right
+        System.out.println("----------------------------------\n"  + inputStr);
+
+        // write the new String with the replaced line OVER the same file
+        FileOutputStream fileOut = new FileOutputStream("database.txt");
+        fileOut.write(inputStr.getBytes());
+        fileOut.close();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    finally{
+        JOptionPane.showMessageDialog(null, "Password is Reset");
+        }
+        
+        
+    }
+    
+    
+    
+      
 }
