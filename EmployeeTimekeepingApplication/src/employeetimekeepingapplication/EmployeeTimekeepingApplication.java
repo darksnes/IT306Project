@@ -156,7 +156,10 @@ public class EmployeeTimekeepingApplication {
 
                 }
                 if(choice == 3){
-               
+                    setHoursWorked(test);
+                }
+                if(choice == 4){
+                    signTimeSheet(test);
                 }
         }while(choice != 5) ;  
       
@@ -205,21 +208,21 @@ public class EmployeeTimekeepingApplication {
                     str = line.split(",");
                     
                     //if type is admin
-                    if(str[9].equals("3")){
-                        Admin employee = new Admin(str[0],str[1],str[2],str[3],Double.parseDouble("12"),Integer.parseInt("5"),str[6],str[7]);
+                    if(str[8].equals("3")){
+                        Admin employee = new Admin(str[0],str[1],str[2],str[3],Double.parseDouble(str[4]),Integer.parseInt(str[5]),str[6],str[8]);
                         SNode node = new SNode(employee,null);
                        
                         list.add(node);
                     }
                     //if type is manager
-                    if(str[9].equals("2")){
-                        Manager employee = new Manager(str[0],str[1],str[2],str[3],Double.parseDouble("12"),Integer.parseInt("5"),str[6],str[7]); 
+                    if(str[8].equals("2")){
+                        Manager employee = new Manager(str[0],str[1],str[2],str[3],Double.parseDouble(str[4]),Integer.parseInt(str[5]),str[6],str[8]); 
                          SNode node = new SNode(employee,null);
                          list.add(node);                       
                     }
                     //if type is employee
                     else{
-                        Employee employee  = new Employee(str[0],str[1],str[2],str[3],Double.parseDouble("12"),Integer.parseInt("5"),str[6],str[7]);
+                        Employee employee  = new Employee(str[0],str[1],str[2],str[3],Double.parseDouble(str[4]),Integer.parseInt(str[5]),str[6],str[8]);
                          SNode node = new SNode(employee,null);
                          list.add(node);    
                     }
@@ -501,7 +504,7 @@ public class EmployeeTimekeepingApplication {
         try{
             pr = new PrintWriter(new BufferedWriter(new FileWriter(new File(filepath), true)));
             pr.println(employee.getId() + "," + employee.getPassword() + "," + employee.getFirstName() +
-                        "," + employee.getLastName() + "," + "," + employee.getHoursWorked() + "," +
+                        "," + employee.getLastName() + "," + employee.getHoursWorked() + "," +
                             employee.getLocation().getLocationId() + "," + employee.getAddress() + ","+ "enabled" + "," + employee.getTypeKey()
                             );
             
@@ -639,6 +642,56 @@ public class EmployeeTimekeepingApplication {
     } catch (Exception e) {
         e.printStackTrace();
     }
+    }
+    
+    public static void setHoursWorked(Employee employee){
+        boolean valid = false;
+        
+        do{
+            try{
+                valid = employee.setHoursWorked(Double.parseDouble(JOptionPane.showInputDialog("Enter hours worked")));
+            }catch(NumberFormatException e){
+                valid = false;
+                JOptionPane.showMessageDialog(null, "Invalid. Hours must be between 0 and 200");
+            }
+        }while(!valid);
+    }
+    
+    public static void signTimeSheet(Employee employee){
+        
+        try {
+        
+        BufferedReader file = new BufferedReader(new FileReader("database.txt"));
+        String line;
+        StringBuffer inputBuffer = new StringBuffer();
+        
+        while ((line = file.readLine()) != null) {
+                String[] dataSet = line.split(",");
+                if(dataSet[0].equals(employee.getId())){
+                    line = line.replace(dataSet[4],String.valueOf(employee.getHoursWorked()));
+                    }
+                inputBuffer.append(line);
+                inputBuffer.append('\n');
+        }
+        String inputStr = inputBuffer.toString();
+        
+        file.close();
+        
+        System.out.println(inputStr); // check that it's inputted right
+
+
+        // check if the new input is right
+        System.out.println("----------------------------------\n"  + inputStr);
+
+        // write the new String with the replaced line OVER the same file
+        FileOutputStream fileOut = new FileOutputStream("database.txt");
+        fileOut.write(inputStr.getBytes());
+        fileOut.close();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+        JOptionPane.showMessageDialog(null, "Hour changes have been saved.");
     }
    
     

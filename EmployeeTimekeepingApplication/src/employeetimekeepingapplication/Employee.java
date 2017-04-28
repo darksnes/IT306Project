@@ -27,6 +27,7 @@ public class Employee {
     private double salary;
     private double hoursWorked;
     private boolean disabled;
+    private int status;
     
     
     
@@ -81,10 +82,13 @@ public class Employee {
         return hoursWorked;
     }
     public String getTypeKey(){
-        return typeKey;
+        return this.typeKey;
     }
     public int getLoginAttempts(){
         return loginAttempts;
+    }
+    public int getStatus(){
+        return this.getStatus();
     }
     
     //mutators
@@ -111,7 +115,7 @@ public class Employee {
     public void setID(String defaultID){
         this.id = defaultID;
     }
-    public boolean setHoursWorked(int hoursWorked){
+    public boolean setHoursWorked(double hoursWorked){
         if(hoursWorked >= 0 && hoursWorked < 100000 ){
                 this.hoursWorked = hoursWorked;
                 return true;
