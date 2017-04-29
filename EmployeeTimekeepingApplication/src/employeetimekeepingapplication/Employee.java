@@ -118,7 +118,7 @@ public class Employee {
     }
     public boolean setHoursWorked(double hoursWorked){
         if(hoursWorked >= 0 && hoursWorked <= 200 ){
-                this.hoursWorked = hoursWorked;
+                this.hoursWorked += hoursWorked;
                 return true;
         }
         else{

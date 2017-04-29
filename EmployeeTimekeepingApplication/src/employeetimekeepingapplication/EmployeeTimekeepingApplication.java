@@ -69,7 +69,7 @@ public class EmployeeTimekeepingApplication {
                 managerMenu(list, test);
             }
             else if(test instanceof Admin){
-               adminMenu(list);
+               adminMenu(list,test);
 
             }
             else{
@@ -98,78 +98,64 @@ public class EmployeeTimekeepingApplication {
             }
         }
         return list;
-    }       
-    private static void managerMenu(SLinkedList list, Employee manager){
-        int choice = 0;
-        do{
-            try{
-                choice = Integer.parseInt(JOptionPane.showInputDialog("Manager Menu: \n" + 
-                        "1. Create Account\n" +
-                        "2. Reports\n"+
-                        "3. Logout\n"+
-                        "4. View employees in location"
-           
-                ));
-              
-            }catch(NumberFormatException e){
-                JOptionPane.showMessageDialog(null, "Invalid Option. Try again");
-            }
-                            
-                if(choice == 1){
-                    createUserMenu(list);
+    }
+     
+    private static void managerMenu(SLinkedList list, Employee test){
+     
+      Object [] options = {"Create Account","Reports", "Logout"};
+  
+      int choice = -1;
+      
+      do{
+         
+         choice = JOptionPane.showOptionDialog(null, "", "Manager Menu ",
+                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+                   		   null,options,options[0]);
+                if(choice == 0){
+                    createUserMenu(list,test);
                 }
-                if(choice == 2){
+                if(choice == 1){
                     if(list.getHead()==null){
                        JOptionPane.showMessageDialog(null, "There are no employees addded to the program");
                     }
                     else{
-                       reports(list); 
+                       viewSameLocation(list,test);
                     }
-                if(choice == 4){
-                    viewSameLocation(list,manager);
                 }
-          
-                }
-                if(choice == 5){
-                    printAll(list);
-                }
-        }while(choice != 3) ;  
-      
+     }while(choice!=2); 
+     
     }
-    private static void employeeMenu(SLinkedList list, Employee test){
-        int choice = 0;
-        do{
-            try{
-                choice = Integer.parseInt(JOptionPane.showInputDialog("Employee Menu: \n" + 
-                        "1. Display Profile\n" +
-                        "2. Update Information\n"+
-                        "3. Enter Time\n"+
-                        "4. Sign Timesheet\n"+
-                        "5. Logout\n"
-                      
-           
-                ));
               
-            }catch(NumberFormatException e){
-                JOptionPane.showMessageDialog(null, "Invalid Option. Try again");
-            }
-                            
+       
+        
+    
+    private static void employeeMenu(SLinkedList list, Employee test){
+      Object [] options = {"Display Profile","Update Information", "Enter Time", "Sign Timesheet", "Logout" };
+  
+      int choice = -1;
+      
+      do{
+         
+         choice = JOptionPane.showOptionDialog(null, "", "Employee Menu ",
+                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+                   		   null,options,options[0]);
+                if(choice == 0){
+                    JOptionPane.showMessageDialog(null,test);
+                }
                 if(choice == 1){
-                  JOptionPane.showMessageDialog(null,test);
+                    updateInformation(test);
                 }
                 if(choice == 2){
-                    updateInformation(test);
-
-                }
-                if(choice == 3){
                     setHoursWorked(test);
+                    JOptionPane.showMessageDialog(null, "Thank you. Please sign the timesheet to finalize your time.");
+                }if(choice == 3){
+                     signTimeSheet(test);
                 }
-                if(choice == 4){
-                    signTimeSheet(test);
-                }
-        }while(choice != 5) ;  
+                
       
+      }while(choice!=4);       
     }
+    
     private static void reports(SLinkedList list){
         int choice = 0;
         do{
@@ -243,15 +229,14 @@ public class EmployeeTimekeepingApplication {
     private static void addEmployee(SLinkedList list, int choice){
         Employee employee = null;
         switch(choice){
-            case 1:
+            case 0:
                 employee = new Employee();
                 break;
-            case 2:
+            case 1:
                 employee = new Manager();
                 break;
-            case 3:
+            case 2:
                 employee = new Admin();
-                System.out.println("admin instanciated");
                 break;            
         }
         
@@ -429,55 +414,82 @@ public class EmployeeTimekeepingApplication {
         return choice;
     }
     
-    private static void createUserMenu(SLinkedList list){
-        int choice = 0;
-        do{
-            try{
-                choice = Integer.parseInt(JOptionPane.showInputDialog("Enter Number Option: \n" + 
-                        "1. Create Employee account \n" +
-                        "2. Create Manager account \n" +
-                        "3. Create Admin account\n "+
-                        "4. Exit"
-                        
-                ));
-            }catch(NumberFormatException e){
-                JOptionPane.showMessageDialog(null, "Invalid Option. Try again");
-            }
-        }while(choice <= 0 || choice > 4) ;
+    private static void createUserMenu(SLinkedList list, Employee test){
+      
+      //check if database is full  
+      if(list.getSize() >1000){
+          
+          JOptionPane.showMessageDialog(null, "The Database is full\n Database cannot exceeded 1000 users ");
+      }
+      else{ //if not full, allow adding employees
         
-       addEmployee(list,choice);
-        
-        
-    }
-    private static void adminMenu(SLinkedList list){
-        int choice = 0;
-        do{
-            try{
-                choice = Integer.parseInt(JOptionPane.showInputDialog("Administrator Menu: \n" + 
-                        "1. Create Account \n" +
-                        "2. Manage User \n" +
-                        "3. View Disabled Users\n "+
-                        "4. Logout\n"
+     
+        if(test instanceof Admin){  
 
-                        
-                ));
-             
-            }catch(NumberFormatException e){
-                JOptionPane.showMessageDialog(null, "Invalid Option. Try again");
-            }
-                            
-                if(choice == 1){
-                    createUserMenu(list);
+            //display admin create user menu
+            Object [] options = {"Create Employee account","Create Manager account", "Create Admin Account", "Exit" };
+
+            int choice = -1;
+
+            do{
+
+              choice = JOptionPane.showOptionDialog(null, "Administrator ", "Create User Menu ",
+                         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+                                           null,options,options[0]);
+               if(choice != 3){
+                   addEmployee(list,choice);
+               }
+
+            }while(choice != 3);
+    
+        }
+        else{
+            //display manager create user menu
+            Object [] options = {"Create Employee account","Exit" };
+
+            int choice = -1;
+
+            do{
+
+              choice = JOptionPane.showOptionDialog(null, "Manager Access", "Create User Menu ",
+                         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+                                           null,options,options[0]);
+               if(choice != 1){
+                   addEmployee(list,choice);
+               }
+
+            }while(choice != 1);          
+            
+            
+        }
+      }
+    }
+    private static void adminMenu(SLinkedList list, Employee test){
+        
+   
+      Object [] options = {"Create Account","Manager User", "View Disabled Users", "Logout" };
+  
+      int choice = -1;
+      
+      do{
+         
+         choice = JOptionPane.showOptionDialog(null, "", "Admin Menu ",
+                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+                   		   null,options,options[0]);
+                if(choice == 0){
+                    createUserMenu(list,test);
                 }
-                if(choice == 2){
+                if(choice == 1){
                     manageUser(list, "jimmy");
                 }
-                if(choice == 3){
+                if(choice == 2){
                     viewDisabled(list);
                 }
-        }while(choice != 4) ;  
       
+      }while(choice!=3);       
+             
     }
+
     //PRINTS ALL EMPLOYEE OBJECTS FOR TESTING PURPOSES***
     private static void printAll(SLinkedList list){
         
@@ -727,16 +739,18 @@ public class EmployeeTimekeepingApplication {
             
     }
     
-    public static void viewSameLocation(SLinkedList list, Employee manager){
+    public static void viewSameLocation(SLinkedList list, Employee test){
         SNode node = list.getHead();
+        String data = "***Employees in same Location***\n";
         
         while(node != null){
             if(node.getData() instanceof Employee && 
-                    node.getData().getLocation().getLocationId() == manager.getLocation().getLocationId()){
-                System.out.println(node.getData().getId());
+                    node.getData().getLocation().getLocationId() == test.getLocation().getLocationId()){
+               data += node.getData().getId() + "\n";
             }
             node = node.getNext();
         }
+        JOptionPane.showMessageDialog(null, data);
     }
     
     public static void enableUser(String userID){
@@ -776,17 +790,30 @@ public class EmployeeTimekeepingApplication {
     }
     
     public static void manageUser(SLinkedList list, String userID){
-        SNode node = list.getHead();
+        SNode node = list.getHead().getNext();
         String data = "";
+   
         
+        while(node != null){
+            data += node.getData().getId() + "\n";
+            System.out.println(data + " \n\n");
+            node = node.getNext();
+        }
+                
+        /*
         while(node != null){
             data += node.getData().getId() + "\n";
             node = node.getNext();
         }
         
+        */
+        
+        
         data += "\n****Admin****";
+        
+        
         String Id = JOptionPane.showInputDialog(data,"Enter ID to view profile");
-        getProfile(Id, list);
+            getProfile(Id, list);
         
     }
     
