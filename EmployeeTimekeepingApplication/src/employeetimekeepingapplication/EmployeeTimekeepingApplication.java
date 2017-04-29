@@ -265,7 +265,21 @@ public class EmployeeTimekeepingApplication {
         employee.setLastName(JOptionPane.showInputDialog("Enter last name: "));
         employee.setID();
         JOptionPane.showMessageDialog(null,"****\nYour user ID is: " + employee.getId() + "\n****\n\nwrite this down!!");
-        employee.setPassword(JOptionPane.showInputDialog("Enter password: "));
+        
+        String password = "";
+         
+               
+        do{
+             password = JOptionPane.showInputDialog("Enter Password. Must be 5 or more characters long.");
+             if(password.length()< 5){
+                 JOptionPane.showMessageDialog(null,"Password must be 5 or more characters long");
+             }
+        
+        }while(password.length() < 5);
+        
+            
+        employee.setPassword(password);
+        
         employee.setSalary(10000);
         
         boolean valid = false;
@@ -836,7 +850,7 @@ public class EmployeeTimekeepingApplication {
         profile += "\n**** Admin Options ****";
         
         String choice = (String) JOptionPane.showInputDialog(null, profile,
-        "The Choice of a Lifetime", JOptionPane.QUESTION_MESSAGE, null, 
+        "Manage User", JOptionPane.QUESTION_MESSAGE, null, 
         choices, 
         choices[0]);
         
