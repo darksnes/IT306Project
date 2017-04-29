@@ -1,8 +1,10 @@
 /*
-Phase 5 - Preliminary System.
+Phase 6- Final Version
 David Brown & Aditya Tornala
-This current version of the program contains all of the features that the final
-program will contain, but it does not retreive data from the text file yet. 
+
+This is the final version of the program, will all feautures, sorting,and a UI 
+
+
 **When the program is run for the first time and the database(text file) is created, the user will have to
 log into a default Admin account in order to start adding employees to the database the credentials for this default admin
 account is :
@@ -119,6 +121,7 @@ public class EmployeeTimekeepingApplication {
                        JOptionPane.showMessageDialog(null, "There are no employees addded to the program");
                     }
                     else{
+                     
                        viewSameLocation(list,test);
                     }
                 }
@@ -754,17 +757,27 @@ public class EmployeeTimekeepingApplication {
     }
     
     public static void viewSameLocation(SLinkedList list, Employee test){
-        SNode node = list.getHead();
+        SNode node = list.getHead().getNext();
+        
+       // String data = "***Employees in same Location***\n";
+        SLinkedList sameLocation = new SLinkedList();
         
         while(node != null){
+         
             if(node.getData() instanceof Employee && 
                     node.getData().getLocation().getLocationId() == test.getLocation().getLocationId()){
-                System.out.println(node.getData().getId());
+                
+               SNode node2 = new SNode(node.getData(),null);
+ 
+               sameLocation.add(node2);
+               System.out.println(sameLocation.getSize());
             }
+              
             node = node.getNext();
         }
-    }
     
+        reports(sameLocation);
+    }
     public static void enableUser(String userID){
         try {
         
