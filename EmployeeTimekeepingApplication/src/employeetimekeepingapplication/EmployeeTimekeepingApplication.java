@@ -240,12 +240,12 @@ public class EmployeeTimekeepingApplication {
                 break;            
         }
         
-        createEmployee(employee);        
+        createEmployee(employee, list);        
         SNode node = new SNode(employee,null);
         list.add(node);
     }
     
-    private static void createEmployee(Employee employee){
+    private static void createEmployee(Employee employee, SLinkedList list){
         
         //set the typeKey
         
@@ -263,7 +263,7 @@ public class EmployeeTimekeepingApplication {
         
         employee.setFirstName(JOptionPane.showInputDialog("Enter first name:"));
         employee.setLastName(JOptionPane.showInputDialog("Enter last name: "));
-        employee.setID();
+        employee.setID(list);
         JOptionPane.showMessageDialog(null,"****\nYour user ID is: " + employee.getId() + "\n****\n\nwrite this down!!");
         employee.setPassword(JOptionPane.showInputDialog("Enter password: "));
         employee.setSalary(10000);
@@ -742,15 +742,21 @@ public class EmployeeTimekeepingApplication {
     public static void viewSameLocation(SLinkedList list, Employee test){
         SNode node = list.getHead();
         String data = "***Employees in same Location***\n";
+        SLinkedList sameLocList = new SLinkedList();
+        
         
         while(node != null){
             if(node.getData() instanceof Employee && 
                     node.getData().getLocation().getLocationId() == test.getLocation().getLocationId()){
-               data += node.getData().getId() + "\n";
+               data += node.getData() + "\n";
+               SNode node2 = new SNode(node.getData(),null);
+               sameLocList.add(node2);
             }
             node = node.getNext();
         }
         JOptionPane.showMessageDialog(null, data);
+        reports(sameLocList);
+        
     }
     
     public static void enableUser(String userID){

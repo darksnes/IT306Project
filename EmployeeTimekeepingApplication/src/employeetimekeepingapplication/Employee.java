@@ -109,9 +109,17 @@ public class Employee {
         this.location.setLocation(locationKey);
     }
     
-    public void setID(){
+    public void setID(SLinkedList list){
+        int count = 0;
+        SNode node = list.getHead();
+        
+        while(node != null){
+            count++;
+            node = node.getNext();
+        }
+        
         Random rand = new Random();
-        this.id = this.lastName.substring(0,2) + rand.nextInt(2000);
+        this.id = this.lastName.substring(0,2) + rand.nextInt(2000) + count;
     }
     public void setID(String defaultID){
         this.id = defaultID;
