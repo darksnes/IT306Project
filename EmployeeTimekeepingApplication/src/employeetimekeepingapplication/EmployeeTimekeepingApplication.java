@@ -1,8 +1,7 @@
 /*
-Phase 5 - Preliminary System.
+Phase 6- Final Version
 David Brown & Aditya Tornala
-This current version of the program contains all of the features that the final
-program will contain, but it does not retreive data from the text file yet. 
+This is the final version of the program, will all feautures, sorting,and a UI 
 **When the program is run for the first time and the database(text file) is created, the user will have to
 log into a default Admin account in order to start adding employees to the database the credentials for this default admin
 account is :
@@ -16,7 +15,10 @@ package employeetimekeepingapplication;
 import java.awt.Dimension;
 import java.io.*;
 import java.util.*;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
@@ -40,8 +42,14 @@ public class EmployeeTimekeepingApplication {
       loginMenu(list);
 
     }
-
     
+    /**
+     * The loginMenu is a void method that presents the user with a dialog box containing a
+     * user input field for username, then password. It also contains a exit button
+     * to close out and a login button. When the user chooses to login, an employee object is returned 
+     * and then checked to see what specific instance is it off. Based on the instance, an appropriate menu 
+     * function is called. Method repeats until user chooses to exit. 
+     */
     public static void loginMenu(SLinkedList list){
         
        //current employee
@@ -81,6 +89,12 @@ public class EmployeeTimekeepingApplication {
         
     }
     
+    /**
+     * The sort method accepts a linkedList parameter and returns a sorted linked list using
+     * selection sort. The sorting criteria is the last name of the employees in the linked list.
+     * Sorting is done in ascending order.
+     */
+    
      public static SLinkedList sort(SLinkedList list){ // working code!!
         SNode min;
         Employee temp;
@@ -99,6 +113,13 @@ public class EmployeeTimekeepingApplication {
         }
         return list;
     }
+     
+     /**
+      * ManagerMenu is a void method that accepts a linked List and an manager object as parameters. 
+      * Purpose of this method is to display a manager menu option to the user and acquire the users chosen
+      * option. Based on the user option, its corresponding method is called. The manager object is passed on to those
+      * methods, to facilitate particular function of that manager. 
+      */
      
     private static void managerMenu(SLinkedList list, Employee test){
      
@@ -119,15 +140,20 @@ public class EmployeeTimekeepingApplication {
                        JOptionPane.showMessageDialog(null, "There are no employees addded to the program");
                     }
                     else{
+                     
                        viewSameLocation(list,test);
                     }
                 }
      }while(choice!=2); 
      
     }
-              
-       
-        
+
+    /**
+      * employeeMenu is a void method that accepts a linked List and an employee object as parameters. 
+      * Purpose of this method is to display a employee menu option to the user and acquire the users chosen
+      * option. Based on the user option, its corresponding method is called. The employee object is passed on to those
+      * methods, to facilitate particular function of that employee.  
+     */
     
     private static void employeeMenu(SLinkedList list, Employee test){
       Object [] options = {"Display Profile","Update Information", "Enter Time", "Sign Timesheet", "Logout" };
@@ -155,6 +181,12 @@ public class EmployeeTimekeepingApplication {
       
       }while(choice!=4);       
     }
+    
+    /**
+     * The reports is a void method that accepts a linkedList as a parameter. The purpose of the method is to provide 
+     * a manager with a sorting options menu. Based on the chosen option, its corresponding method is called. The linkedList
+     * parameter is passed to those corresponding methods. 
+     */
     
     private static void reports(SLinkedList list){
         int choice = 0;
@@ -240,12 +272,12 @@ public class EmployeeTimekeepingApplication {
                 break;            
         }
         
-        createEmployee(employee, list);        
+        createEmployee(employee,list);        
         SNode node = new SNode(employee,null);
         list.add(node);
     }
     
-    private static void createEmployee(Employee employee, SLinkedList list){
+    private static void createEmployee(Employee employee,SLinkedList list){
         
         //set the typeKey
         
@@ -265,7 +297,22 @@ public class EmployeeTimekeepingApplication {
         employee.setLastName(JOptionPane.showInputDialog("Enter last name: "));
         employee.setID(list);
         JOptionPane.showMessageDialog(null,"****\nYour user ID is: " + employee.getId() + "\n****\n\nwrite this down!!");
-        employee.setPassword(JOptionPane.showInputDialog("Enter password: "));
+        
+        
+        String password = "";
+         
+               
+        do{
+             password = getHiddenPassWord();
+             if(password.length()< 5){
+                 JOptionPane.showMessageDialog(null,"Password must be 5 or more characters long");
+             }
+        
+        }while(password.length() < 5);
+        
+            
+        employee.setPassword(password);
+        
         employee.setSalary(10000);
         
         boolean valid = false;
@@ -285,11 +332,42 @@ public class EmployeeTimekeepingApplication {
       
     }
     private static void addAddress(Employee employee){
-        employee.getAddress().setStreet(JOptionPane.showInputDialog("Enter Street name: "));
-        employee.getAddress().setAptNum(JOptionPane.showInputDialog("Enter apt num: "));
-        employee.getAddress().setCity(JOptionPane.showInputDialog("Enter City: "));
-        employee.getAddress().setState(JOptionPane.showInputDialog("Enter State: "));
-        employee.getAddress().setZipCode(JOptionPane.showInputDialog("Enter ZIP: "));    
+        boolean valid = false;
+        
+        do{
+            valid = employee.getAddress().setStreet(JOptionPane.showInputDialog("Enter Street name"));
+            if(!valid){
+                JOptionPane.showMessageDialog(null, "Invalid cannot be empty. ");
+            }
+        }while(!valid);
+        
+        valid = false;
+        
+        do{
+            valid = employee.getAddress().setCity(JOptionPane.showInputDialog("Enter City name"));
+            if(!valid){
+                JOptionPane.showMessageDialog(null, "Invalid cannot be empty. ");
+            }
+        }while(!valid);
+        
+        valid = false;
+        
+        do{
+            valid = employee.getAddress().setAptNum(JOptionPane.showInputDialog("Enter apartment number"));
+        }while(!valid);
+        
+        valid = false;
+        
+        do{
+            valid = employee.getAddress().setState(JOptionPane.showInputDialog("Enter State name: "));
+        }while(!valid);
+        
+        valid = false;
+        
+        do{
+            valid = employee.getAddress().setZipCode(JOptionPane.showInputDialog("Enter Zip Code"));
+        }while(!valid);
+        
     }
     
     private static void addLocation(Employee employee){
@@ -740,25 +818,26 @@ public class EmployeeTimekeepingApplication {
     }
     
     public static void viewSameLocation(SLinkedList list, Employee test){
-        SNode node = list.getHead();
-        String data = "***Employees in same Location***\n";
-        SLinkedList sameLocList = new SLinkedList();
+        SNode node = list.getHead().getNext();
         
+       // String data = "***Employees in same Location***\n";
+        SLinkedList sameLocation = new SLinkedList();
         
         while(node != null){
+         
             if(node.getData() instanceof Employee && 
                     node.getData().getLocation().getLocationId() == test.getLocation().getLocationId()){
-               data += node.getData() + "\n";
+                
                SNode node2 = new SNode(node.getData(),null);
-               sameLocList.add(node2);
+ 
+               sameLocation.add(node2);
             }
+              
             node = node.getNext();
         }
-        JOptionPane.showMessageDialog(null, data);
-        reports(sameLocList);
-        
-    }
     
+        reports(sameLocation);
+    }
     public static void enableUser(String userID){
         try {
         
@@ -844,7 +923,7 @@ public class EmployeeTimekeepingApplication {
         profile += "\n**** Admin Options ****";
         
         String choice = (String) JOptionPane.showInputDialog(null, profile,
-        "The Choice of a Lifetime", JOptionPane.QUESTION_MESSAGE, null, 
+        "Manage User", JOptionPane.QUESTION_MESSAGE, null, 
         choices, 
         choices[0]);
         
@@ -904,6 +983,23 @@ public class EmployeeTimekeepingApplication {
         }
         
         
+    }
+    
+    public static String getHiddenPassWord(){
+        JPasswordField password = new JPasswordField(10);
+        JLabel label = new JLabel("Enter password: ");
+        JPanel panel = new JPanel();
+        panel.add(label);
+        panel.add(password);
+        
+        JOptionPane.showConfirmDialog(null, panel, "Enter Password", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        
+        if (JOptionPane.OK_OPTION == 0) {
+            String passWord = new String(password.getPassword());
+            return passWord;
+        }
+        
+        return "";
     }
     
     

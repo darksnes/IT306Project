@@ -121,6 +121,7 @@ public class Employee {
         Random rand = new Random();
         this.id = this.lastName.substring(0,2) + rand.nextInt(2000) + count;
     }
+
     public void setID(String defaultID){
         this.id = defaultID;
     }

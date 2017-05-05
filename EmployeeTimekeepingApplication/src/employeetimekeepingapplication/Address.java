@@ -5,6 +5,8 @@
  */
 package employeetimekeepingapplication;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Dave
@@ -39,20 +41,94 @@ public class Address {
         return zipCode;
     }
     //mutators
-    public void setStreet(String street){
-        this.street = street;
+    public boolean setStreet(String street){
+        if(!street.equals("")){
+            this.street = street;
+            return true;
+        }
+        
+        return false;
     }
-    public void setAptNum(String aptNum){
-        this.aptNum = aptNum;
+    public boolean setAptNum(String aptNum){
+        if(validateApartmentNum(aptNum)){
+            this.aptNum = aptNum;
+            return true;
+        }
+        
+        return false;
     }
-    public void setCity(String city){
-        this.city = city;
+    public boolean setCity(String city){
+        if(!city.equals("")){
+            this.city = city;
+            return true;
+        }
+        
+        return false;
     }
-    public void setState(String state){
-        this.state = state;
+    public boolean setState(String state){
+        if(validateState(state)){
+            this.state = state;
+            return true;
+        }
+        
+        return false;
     }
-    public void setZipCode(String zipCode){
-        this.zipCode = zipCode;
+    public boolean setZipCode(String zipCode){
+        if(validateZip(zipCode)){
+            this.zipCode = zipCode;
+            return true;
+        }
+        
+        return false;
+    }
+    
+    //Special Purpose Methods
+    private boolean validateZip(String zip){
+        if(zip.length() != 5){
+            JOptionPane.showMessageDialog(null,"Invalid. Zip has to have 5 digits");
+            return false;
+        }
+        
+        for(int i=0;i<zip.length();i++){
+            if(!Character.isDigit(zip.charAt(i))){
+                JOptionPane.showMessageDialog(null,"Invalid. Zip cannot have alphabets or characters.");
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    private boolean validateState(String state){
+        if(state.equals("")){
+            JOptionPane.showMessageDialog(null,"State cannot be empty.");
+            return false;
+        }
+        
+        for(int i=0;i<state.length();i++){
+            if(!Character.isAlphabetic(state.charAt(i))){
+                JOptionPane.showMessageDialog(null,"Invalid. Cannot contain numbers or characters.");
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    private boolean validateApartmentNum(String aprtNum){
+        if(aprtNum.equals("")){
+            JOptionPane.showMessageDialog(null,"Apartment number cannot be empty. If no apartment enter 0.");
+            return false;
+        }
+        
+        for(int i=0;i<aprtNum.length();i++){
+            if(!Character.isDigit(aprtNum.charAt(i))){
+                JOptionPane.showMessageDialog(null,"Invalid. Apartment number cannot have alphabets or characters.");
+                return false;
+            }
+        }
+        
+        return true;
     }
     
     public String toString(){
