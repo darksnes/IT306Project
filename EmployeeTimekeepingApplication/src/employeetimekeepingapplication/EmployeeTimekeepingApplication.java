@@ -219,6 +219,12 @@ public class EmployeeTimekeepingApplication {
         
         
     }
+    /**
+     * FileToList is a void method, that accepts a linked list as parameter. The purpose of this method is to create Employee
+     * objects from each line in the text file, and add to the linked list. The method uses Buffered reader to read data from
+     * the text file. Based on certain trigger number at the end of each text file, the object can be instantiated as either Admin
+     * employee or Manager. 
+     */
     
     private static void fileToList(SLinkedList list){
        File data = new File("database.txt");
@@ -258,6 +264,11 @@ public class EmployeeTimekeepingApplication {
             e.printStackTrace();
         }
     }
+    /**
+     * AddEmployee method is a void method, that accepts two parameters, linked list and choice. The choice is used to 
+     * determine the which subclass object to initialize. The objects and the list are then passed as parameters to 
+     * createEmployee method. The objects is also added to the linked list. 
+     */
     private static void addEmployee(SLinkedList list, int choice){
         Employee employee = null;
         switch(choice){
@@ -276,6 +287,13 @@ public class EmployeeTimekeepingApplication {
         SNode node = new SNode(employee,null);
         list.add(node);
     }
+    /**
+     * createEmloyee is a void method. THe purpose of this method is to provide details(fill out attributes) 
+     * from user input to fully create an employee object. The writeToFile method is called after object has been
+     * successfully filled out. The write to file method add the object to the text file. 
+     * @param employee
+     * @param list 
+     */
     
     private static void createEmployee(Employee employee,SLinkedList list){
         
@@ -331,6 +349,10 @@ public class EmployeeTimekeepingApplication {
         writeToFile("database.txt", employee);
       
     }
+    /**
+     * addAdress is a void method, that fill out attributes of an address object, from user input. 
+     * @param employee 
+     */
     private static void addAddress(Employee employee){
         boolean valid = false;
         
@@ -369,11 +391,20 @@ public class EmployeeTimekeepingApplication {
         }while(!valid);
         
     }
+    /**
+     * addLocation is a void method that fill out attributes of a location object from user input. 
+     * @param employee 
+     */
     
     private static void addLocation(Employee employee){
         int id = locationMenu();
         employee.getLocation().setLocation(id);
     }
+    /**
+     * locationMenu returns a int value.  The purpose of this method is to provide user with a location menu, 
+     * and return their choice. 
+     * @return 
+     */
     
     private static int locationMenu(){
         int locationID;
@@ -391,6 +422,11 @@ public class EmployeeTimekeepingApplication {
         
         return locationID;
     }
+    /**
+     * checkFilExists return a boolean value. The purpose of this method is to check whether the chosen text file to store all 
+     * the data exits. Return the appropriate value, depending on whether the file exists or not. 
+     * @return 
+     */
     
     private static boolean checkFileExists(){
         String fileName = "database.txt";
@@ -400,6 +436,10 @@ public class EmployeeTimekeepingApplication {
         
         return check;
     }
+    /**
+     * createFile is a void method. The purpose of this method is to create a text file, if the chosen text file does not 
+     * exist.
+     */
     
     private static void createFile(){
         if(checkFileExists()){
@@ -428,7 +468,16 @@ public class EmployeeTimekeepingApplication {
         
     }
     
-  //  public static void writeDefaultAdd()
+  /**
+   * The purpose of the login method is to return employee object of the specified user id if the login is 
+   * a success. If the login fails, the method displays the particular error to the user. The method also checks to 
+   * see the number of login attempts, if the login exceeds 3 attempts, the method calls an other method which disables
+   * the account associated with the user ID. 
+   * @param userID
+   * @param password
+   * @param list
+   * @return 
+   */
     
     private static Employee login(String userID, String password, SLinkedList list){// login method 
         int code = searchTextFile(userID, password);
@@ -458,8 +507,14 @@ public class EmployeeTimekeepingApplication {
         return null;
     }
     
+    /**
+     * checkIfFileEmpty is a void method. THe purpose of this method is to check if the contents of the specified
+     * file is empty. If empty the method writes to the file a default admin account. 
+     * @param filepath 
+     */
     
-    private static void checkIfFileEmpty(String filepath){// if file is empty adds admin account
+    
+    private static void checkIfFileEmpty(String filepath){
         File file = new File(filepath);
         
         if(file.length() == 0){
@@ -477,6 +532,11 @@ public class EmployeeTimekeepingApplication {
         }
         }
     }
+    /**
+     * mainMenu method displays the main menu to the user, which contains create account or login to existing account.
+     * The method return the choice of the user. 
+     * @return 
+     */
       
     private static int mainMenu(){
         int choice = 0;
@@ -491,6 +551,11 @@ public class EmployeeTimekeepingApplication {
         
         return choice;
     }
+    /**
+     * createUserMenu method provides provides the user option to create various employee accounts. 
+     * @param list
+     * @param test 
+     */
     
     private static void createUserMenu(SLinkedList list, Employee test){
       
@@ -542,6 +607,12 @@ public class EmployeeTimekeepingApplication {
         }
       }
     }
+    /**
+     * adminMenu method provides the logged in admin user a menu option, with task that an admin account has right
+     * to do. The chosen task is then passed onto their specified methods. 
+     * @param list
+     * @param test 
+     */
     private static void adminMenu(SLinkedList list, Employee test){
         
    
@@ -567,6 +638,10 @@ public class EmployeeTimekeepingApplication {
       }while(choice!=3);       
              
     }
+    /**
+     * printAll method purpose is to print all users that have so far registered with an account. 
+     * @param list 
+     */
 
     //PRINTS ALL EMPLOYEE OBJECTS FOR TESTING PURPOSES***
     private static void printAll(SLinkedList list){
@@ -594,6 +669,13 @@ public class EmployeeTimekeepingApplication {
                 JOptionPane.showMessageDialog(null, output);
             }    
         }
+    
+    /**
+     * The writeTofile method accepts an employee object as a parameter. The employee object is then written to a specified file using
+     * the printWriter class. 
+     * @param filepath
+     * @param employee 
+     */
 
     private static void writeToFile(String filepath, Employee employee){ // adds object to the files. 
         PrintWriter pr = null;
@@ -611,6 +693,14 @@ public class EmployeeTimekeepingApplication {
             pr.close();
         }
     }
+    /**
+     * searchTextFile method purpose is to search the text file line that matches the given parameters, user and password. If a 
+     * match is found for both parameters, the text file returns the specified status code value. If the user name is matched, 
+     * but password does not, its specified status code is returned. If both don't match, its specified status will be returned. 
+     * @param userID
+     * @param password
+     * @return 
+     */
         
      private static int searchTextFile(String userID, String password){// earches file for the specified login
         File data = new File("database.txt");
@@ -646,6 +736,13 @@ public class EmployeeTimekeepingApplication {
         return statusCode;
     }
      
+     /**
+      * sortByHours method sorts the linked listed in the parameter. THe sort is based on selection sort algorithm.
+      * The sort criteria is the number of hours worked by each employee object. Sort is done in ascending order. 
+      * @param list
+      * @return 
+      */
+     
      public static SLinkedList sortByHours(SLinkedList list){ 
         SNode min;
         Employee temp;
@@ -664,6 +761,15 @@ public class EmployeeTimekeepingApplication {
         }
         return list;
     }
+     
+    /**
+     * updateInformationMethod gets the user input and updates certain attributes of the 
+     * employee object in its parameters. The method user buffer reader to read data from the file
+     * and appends the data to a string buffer. The data in the buffer is added to string, then the 
+     * replace method is used to update the data to the one provided by the user. Then the file is 
+     * over written with the new data. 
+     * @param test 
+     */
      
     public static void updateInformation(Employee test){
         
@@ -707,6 +813,12 @@ public class EmployeeTimekeepingApplication {
         
     }
     
+    /**
+     * disableUser method find the userID given in its parameter, within the text file, then replaces the enabled keyword 
+     * in that specific line to disabled. The user then becomes disabled, when the data is read. 
+     * @param userID 
+     */
+    
     public static void disableUser(String userID){ //use for 
         try {
         
@@ -742,6 +854,10 @@ public class EmployeeTimekeepingApplication {
             JOptionPane.showMessageDialog(null, "Account is now Disabled");
         }
     }
+    /**
+     * 
+     * @param employee 
+     */
     
     public static void setHoursWorked(Employee employee){
         boolean valid = false;
