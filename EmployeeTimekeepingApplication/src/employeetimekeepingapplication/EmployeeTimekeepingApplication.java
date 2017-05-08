@@ -552,7 +552,9 @@ public class EmployeeTimekeepingApplication {
         return choice;
     }
     /**
-     * createUserMenu method provides provides the user option to create various employee accounts. 
+     * createUserMenu method provides provides the user option to create various employee account, based on the
+     * instance type of parameter test. If parameter is of type admin, admin options are displayed. If parameter is
+     * of type manager, manager option are displayed. 
      * @param list
      * @param test 
      */
@@ -608,7 +610,7 @@ public class EmployeeTimekeepingApplication {
       }
     }
     /**
-     * adminMenu method provides the logged in admin user a menu option, with task that an admin account has right
+     * adminMenu method provides the logged in admin user a menu option, with tasks that an admin account has rights
      * to do. The chosen task is then passed onto their specified methods. 
      * @param list
      * @param test 
@@ -671,8 +673,8 @@ public class EmployeeTimekeepingApplication {
         }
     
     /**
-     * The writeTofile method accepts an employee object as a parameter. The employee object is then written to a specified file using
-     * the printWriter class. 
+     * The writeTofile method accepts an employee object as a parameter. The employee object is then written to a 
+     * specified file using the printWriter class. 
      * @param filepath
      * @param employee 
      */
@@ -815,7 +817,7 @@ public class EmployeeTimekeepingApplication {
     
     /**
      * disableUser method find the userID given in its parameter, within the text file, then replaces the enabled keyword 
-     * in that specific line to disabled. The user then becomes disabled, when the data is read. 
+     * in that specific line to disabled. The user then is disabled, when the data is read. 
      * @param userID 
      */
     
@@ -855,7 +857,8 @@ public class EmployeeTimekeepingApplication {
         }
     }
     /**
-     * 
+     * setHours method enables the user to set the number of hours worked for an employee. The employee is the one
+     * passed as parameter. The method also makes sure to validate the user input. 
      * @param employee 
      */
     
@@ -871,6 +874,12 @@ public class EmployeeTimekeepingApplication {
             }
         }while(!valid);
     }
+    /**
+     * signTimeSheet takes the update employee hoursWorked, and reflects that change in the text file. Method uses 
+     * BufferedReader to read the file, find the line with the employee userID, then change the hours worked attribute on that 
+     * line. The is then overwritten with the new changes. 
+     * @param employee 
+     */
     
     public static void signTimeSheet(Employee employee){
         
@@ -892,13 +901,13 @@ public class EmployeeTimekeepingApplication {
         
         file.close();
         
-        System.out.println(inputStr); // check that it's inputted right
+        System.out.println(inputStr); 
 
 
         // check if the new input is right
         System.out.println("----------------------------------\n"  + inputStr);
 
-        // write the new String with the replaced line OVER the same file
+        
         FileOutputStream fileOut = new FileOutputStream("database.txt");
         fileOut.write(inputStr.getBytes());
         fileOut.close();
@@ -908,6 +917,13 @@ public class EmployeeTimekeepingApplication {
     }
         JOptionPane.showMessageDialog(null, "Hour changes have been saved.");
     }
+    
+    /**
+     * viewDisabled method reads the file using bufferedReader to find disabled user accounts.
+     * If an account is disabled, its is added to a string. After the linkedList has been
+     * searched, all disabled users are displayed to the user. 
+     * @param list 
+     */
     
     public static void viewDisabled(SLinkedList list){
         String disabled = "**DISABLED USERS**\n";
@@ -933,6 +949,16 @@ public class EmployeeTimekeepingApplication {
             
     }
     
+    /**
+     * viewSameLocation method goes through the linked list that has been passed as parameter, to find
+     * the same location as the manager, which is the parameter test. THe method uses linear search to find
+     * employees with the same location as manager. If the same location is found, the employee object is 
+     * added to an other linked list. The linked list containing the employees of same location is to passed on 
+     * to the reports method. 
+     * @param list
+     * @param test 
+     */
+    
     public static void viewSameLocation(SLinkedList list, Employee test){
         SNode node = list.getHead().getNext();
         
@@ -954,6 +980,12 @@ public class EmployeeTimekeepingApplication {
     
         reports(sameLocation);
     }
+    /**
+     * enableUser method checks through the text file and the finds the line that corresponds to the userId, which is 
+     * passed as a parameter. The disable attribute in the lined is replaced with enabled. The file is then overwritten to
+     * indicate the new change. 
+     * @param userID 
+     */
     public static void enableUser(String userID){
         try {
         
@@ -989,6 +1021,13 @@ public class EmployeeTimekeepingApplication {
             JOptionPane.showMessageDialog(null, "Account is now Enabled");
         }
     }
+    /**
+     * the manage user method provides the administrator with a list of all the users in the database.
+     * The admin is then provided with a input box, to enter the userID for which the admin wants to take
+     * actions on. 
+     * @param list
+     * @param userID 
+     */
     
     public static void manageUser(SLinkedList list, String userID){
         SNode node = list.getHead().getNext();
@@ -1020,7 +1059,9 @@ public class EmployeeTimekeepingApplication {
     
     /**
      * Gets the user profile and gives the admin options, that include enable or
-     * disable account and reset user password. 
+     * disable account and reset user password. Search through the linked list
+     * user linear search and finds the node that matches the userID, which is passed 
+     * as a parameter.
      */
     
     public static void getProfile(String userID, SLinkedList list){
@@ -1100,6 +1141,11 @@ public class EmployeeTimekeepingApplication {
         
         
     }
+    /**
+     * getHiddenPassword method uses JpasswordField and Jlabel to display user input for password.
+     * Jpassword enables the password to be hidden, when typed by the user. 
+     * @return 
+     */
     
     public static String getHiddenPassWord(){
         JPasswordField password = new JPasswordField(10);
